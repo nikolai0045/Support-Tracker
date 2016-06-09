@@ -130,7 +130,7 @@ class HomeView(View):
 
 		try:
 			user.userprofile
-		except RelatedObjectDoesNotExist:
+		except userprofile.DoesNotExist:
 			return redirect('/create_user_profile/')
 
 		
