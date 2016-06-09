@@ -187,7 +187,7 @@ class HomeView(View):
 		return render(request,self.template,context)
 
 class CreateUserProfile(View):
-	template = 'create_user_profile.html'
+	template = 'supporttracker/create_user_profile.html'
 	def get(self,request,*args,**kwargs):
 		form = CreateUserProfileForm(user=request.user)
 		context = {
