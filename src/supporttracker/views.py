@@ -128,8 +128,8 @@ class HomeView(View):
 
 		user = request.user
 
-		try user.userprofile:
-			pass
+		try:
+			user.userprofile
 		except RelatedObjectDoesNotExist:
 			return redirect('/create_user_profile/')
 
