@@ -128,7 +128,9 @@ class HomeView(View):
 
 		user = request.user
 
-		if not user.userprofile:
+		try user.userprofile:
+			pass
+		except RelatedObjectDoesNotExist:
 			return redirect('/create_user_profile/')
 
 		
@@ -217,7 +219,7 @@ class CreateUserProfile(View):
 				'form':form,
 			}
 			return render(request,self.template,context)
-			
+
 class LoginView(View):
 	template = 'registration/login.html'
 	
