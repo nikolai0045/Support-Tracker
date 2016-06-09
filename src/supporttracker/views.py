@@ -217,6 +217,7 @@ class CreateUserProfile(View):
 				'form':form,
 			}
 			return render(request,self.template,context)
+			
 class LoginView(View):
 	template = 'registration/login.html'
 	
