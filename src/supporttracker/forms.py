@@ -133,6 +133,10 @@ class CreateUserProfileForm(forms.Form):
 					Submit('submit','Create Profile', css_class='btn btn-default'),
 				)
 			)
+
+		def clean(self):
+			Super (CreateUserProfileForm,self).clean()
+			self.cleaned_data['yearly_support_goal']=int(self.cleaned_data['yearly_support_goal'])
 	
 	
 class ChangePasswordForm(PasswordChangeForm):
