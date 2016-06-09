@@ -100,11 +100,44 @@ class LoginForm(forms.Form):
 		user = authenticate(username=username, password=password)
 		return user
 
+class CreateUserProfileForm(forms.Form):
+	def __init__(self,*args,**kwargs):
+		user = kwargs.pop('user')
+		super (CreateUserProfileForm,self).__init__(*args,**kwargs)
+		self.fields['first_name'] = forms.CharField(max_length=120,required=True,initial=user.first_name)
+		self.fields['last_name'] = forms.CharField(max_length=120,required=True,initial=user.last_name)
+		self.fields['spouse_name'] = forms.CharField(max_length=120, required=False)
+		self.fields['street_address'] = forms.CharField(max_length=120, required=True)
+		self.fields['city'] = forms.CharField(max_length=120,required=True)
+		self.fields['state'] = forms.TypedChoiceField(
+			choices=STATE_CHOICES,
+			)
+		self.fields['zip'] = forms.IntegerField(required=True)
+		self.fields['yearly_support_goal'] = forms.IntegerField(required=False)
+
+		self.helper=FormHelper(self)
+		self.helper.form_id='create_user_profile_form'
+		self.helper.layout = Layout(
+			Div(
+					'first_name',
+					'last_name',
+					'spouse_name',
+					'street_address',
+					'city',
+					'state',
+					'zip',
+					'yearly_support_goal',
+					css_class = ('form-group'),
+				),
+			FormActions(
+					Submit('submit','Create Profile', css_class='btn btn-default'),
+				)
+			)
+	
+	
 class ChangePasswordForm(PasswordChangeForm):
 
 	def __init__(self,*args,**kwargs):
-		for arg in kwargs:
-			print arg
 		super (ChangePasswordForm,self).__init__(*args,**kwargs)
 		
 		self.helper = FormHelper(self)

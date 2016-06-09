@@ -27,6 +27,7 @@ urlpatterns = [
 	url(r'^login/$', views.LoginView.as_view()),
 	url(r'^logout/$', logout_view),
 	url(r'^profile/$', views.UserProfileView.as_view()),
+	url(r'^create_user_profile/$', views.CreateUserProfile.as_view()),
 	url(r'^settings/$', views.UserSettingsView.as_view()),
 	url(r'^change_password/$',views.ChangePasswordAJAX.as_view()),
 	url(r'^supporters/$', views.supporters_list_view),

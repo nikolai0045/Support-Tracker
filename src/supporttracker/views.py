@@ -7,7 +7,7 @@ from django.contrib.auth import authenticate, login, update_session_auth_hash
 from django.contrib.auth.decorators import login_required
 from django.utils.decorators import method_decorator
 from .models import UserProfile, Person, SupportRelationship, ContactRelationship, ThankYou, Letter, Call, Meeting, VoiceMail, Reminder, Note, Message, FollowUp, Referral
-from .forms import AddContactForm, AddThankYouForm, AddLetterForm, RegisterGiftForm, RegisterCallForm, RegisterMeetingForm, RegisterVoiceMailForm, RecordMeetingModalForm, AddReminder, RecordCallModalForm, RecordFollowUpModalForm, UpdateReminderModalForm, RecordMessageModalForm, ScheduleMessageModalForm, ScheduleCallModalForm, ScheduleThankYouModalForm, RecordThankYouModalForm, ScheduleFollowUpModalForm, UpdateStageForm, LoginForm, AddReferralForm, ChangePasswordForm
+from .forms import AddContactForm, AddThankYouForm, AddLetterForm, RegisterGiftForm, RegisterCallForm, RegisterMeetingForm, RegisterVoiceMailForm, RecordMeetingModalForm, AddReminder, RecordCallModalForm, RecordFollowUpModalForm, UpdateReminderModalForm, RecordMessageModalForm, ScheduleMessageModalForm, ScheduleCallModalForm, ScheduleThankYouModalForm, RecordThankYouModalForm, ScheduleFollowUpModalForm, UpdateStageForm, LoginForm, AddReferralForm, ChangePasswordForm, CreateUserProfileForm
 import datetime
 from functools import partial, wraps
 from django.contrib.auth.views import login as login_view
@@ -127,6 +127,10 @@ class HomeView(View):
 	def get(self,request):
 
 		user = request.user
+
+		if not user.userprofile:
+			return redirect('/create_user_profile/')
+
 		
 		all_meetings = Meeting.objects.filter(staff_person=user.userprofile)
 		all_calls = Call.objects.filter(staff_person=user.userprofile)
@@ -179,7 +183,40 @@ class HomeView(View):
 		}
 
 		return render(request,self.template,context)
-		
+
+class CreateUserProfile(View):
+	template = 'create_user_profile.html'
+	def get(self,request,*args,**kwargs):
+		form = CreateUserProfileForm(user=request.user)
+		context = {
+			'form':form,
+		}
+		return render(request,self.template,context)
+
+	def post(self,request,*args,**kwargs):
+		form = CreateUserProfileForm(request.POST,user=request.user)
+		user = request.user
+		if form.is_valid():
+			data=form.cleaned_data
+			user.first_name = data['first_name']
+			user.last_name = data['last_name']
+			user.save()
+			new_profile = UserProfile(
+				user = user,
+				spouse_name = data['spouse_name'],
+				street_address = data['street_address'],
+				city = data['city'],
+				state = data['state'],
+				zip = data['zip'],
+				yearly_support_goal = data['yearly_support_goal'],
+				)
+			new_profile.save()
+			return redirect('/home/')
+		else:
+			context = {
+				'form':form,
+			}
+			return render(request,self.template,context)
 class LoginView(View):
 	template = 'registration/login.html'
 	
