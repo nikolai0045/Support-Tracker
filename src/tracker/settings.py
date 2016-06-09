@@ -20,7 +20,8 @@ BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 # See https://docs.djangoproject.com/en/1.9/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = os.environ.get('DJANGO_SECRET_KEY')
+with open('/home/COTools/secret_key.txt') as f:
+	SECRET_KEY = f.read().strip()
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
@@ -86,12 +87,17 @@ WSGI_APPLICATION = 'tracker.wsgi.application'
 # Database
 # https://docs.djangoproject.com/en/1.9/ref/settings/#databases
 
+with open('/home/COTools/database_info.txt') as f:
+	DB_PASSWORD = f.read().strip()
+
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.mysql',
-        'OPTIONS': {
-		'read_default_file':'/home/COTools/mysqlconf.cnf',
-	},
+        'NAME': 'support_tracker',
+	'USER': 'support_tracker',
+	'PASSWORD': DB_PASSWORD,
+	'HOST':'localhost',
+	'PORT':'',
     }
 }
 
