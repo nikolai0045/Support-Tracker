@@ -33,6 +33,7 @@ urlpatterns = [
 	url(r'^supporters/$', views.supporters_list_view),
 	url(r'(?P<rel_id>[0-9]+)/delete_gift', views.DeleteSupporterView.as_view()),
 	url(r'^(?P<supporter_id>[0-9]+)/support_profile/$', views.supporter_profile_view),
+	url(r'^upload_contact_list/$', views.UploadContacts.as_view()),
 	url(r'^new_contact/$', views.new_contact),
 	url(r'^new_thank_you/$', views.new_thank_you),
 	url(r'^new_letter/$', views.new_letter),

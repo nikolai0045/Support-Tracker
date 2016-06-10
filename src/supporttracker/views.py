@@ -8,6 +8,7 @@ from django.contrib.auth.decorators import login_required
 from django.utils.decorators import method_decorator
 from .models import UserProfile, Person, SupportRelationship, ContactRelationship, ThankYou, Letter, Call, Meeting, VoiceMail, Reminder, Note, Message, FollowUp, Referral
 from .forms import AddContactForm, AddThankYouForm, AddLetterForm, RegisterGiftForm, RegisterCallForm, RegisterMeetingForm, RegisterVoiceMailForm, RecordMeetingModalForm, AddReminder, RecordCallModalForm, RecordFollowUpModalForm, UpdateReminderModalForm, RecordMessageModalForm, ScheduleMessageModalForm, ScheduleCallModalForm, ScheduleThankYouModalForm, RecordThankYouModalForm, ScheduleFollowUpModalForm, UpdateStageForm, LoginForm, AddReferralForm, ChangePasswordForm, CreateUserProfileForm
+from .decorators import profile_required
 import datetime
 from functools import partial, wraps
 from django.contrib.auth.views import login as login_view
@@ -1844,7 +1845,24 @@ class ContactsListView(BaseDatatableView):
 			
 		if column == 'first_name':
 			pass
-			
+
+class UploadContacts(views.View):
+	template = 'supporttracker/upload_contacts.html'
+	@method_decorator(login_required)
+	def get(self,request,*args,**kwargs):
+		return render(request,self.template)
+
+	@method_decorator(login_required)
+	def post(self,request,*args,**kwargs):
+		f = request.FILES['contact_list']
+		contacts = f.readlines()
+		f.close()
+		context = {
+			'contacts':contacts,
+		}
+		return render(request,self.template,context)
+
+
 	
 def supporter_profile_view(request,supporter_id):
 	user = request.user

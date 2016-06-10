@@ -942,6 +942,9 @@ class AddReminder(forms.Form):
 		),
 	)
 	
+class UploadContactsForm(forms.Form):
+	supporter_upload = models.FileField()
+
 class AddContactForm(forms.Form):
 
 	def __init__(self,*args,**kwargs):

@@ -30,6 +30,9 @@ ALLOWED_HOSTS = []
 
 STATIC_ROOT = '/home/COTools/Support-Tracker/src/static'
 STATIC_URL = '/static/'
+
+METHOD_ROOT = '/home/COTools/Support-Tracker/src/media'
+METHOD_URL = '/media/'
 # Application definition
 
 INSTALLED_APPS = [
