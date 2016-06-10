@@ -5,10 +5,8 @@ def profile_required():
 
 	def _dec(view_func):
 		def _view(request,*args,**kwargs):
-			if request.user.is_authenticated():
-				if request.user.userprofile = None:
-					return redirect(create_profile_url)
-				else:
-					return view_func(request,*args,**kwargs)
-			else:
-				return redirect('/login/')
+			try:
+				user.userprofile
+				return view_func(request,*args,**kwargs)
+			except UserProfile.DoesNotExist:
+				return redirect('/create_user_profile/')
