@@ -27,6 +27,7 @@ with open('/home/COTools/secret_key.txt') as f:
 DEBUG = True
 
 ALLOWED_HOSTS = []
+CREATE_PROFILE_URL = '/create_user_profile'
 
 STATIC_ROOT = '/home/COTools/Support-Tracker/src/static'
 STATIC_URL = '/static/'
