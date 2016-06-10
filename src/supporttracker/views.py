@@ -1846,7 +1846,7 @@ class ContactsListView(BaseDatatableView):
 		if column == 'first_name':
 			pass
 
-class UploadContacts(views.View):
+class UploadContacts(View):
 	template = 'supporttracker/upload_contacts.html'
 	@method_decorator(login_required)
 	def get(self,request,*args,**kwargs):
