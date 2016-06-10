@@ -28,8 +28,8 @@ DEBUG = True
 
 ALLOWED_HOSTS = []
 
-STATIC_ROOT = os.path.join(BASE_DIR, 'static')
-
+STATIC_ROOT = '/home/COTools/Support-Tracker/src/static'
+STATIC_URL = '/static/'
 # Application definition
 
 INSTALLED_APPS = [
