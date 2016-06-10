@@ -1857,6 +1857,42 @@ class UploadContacts(View):
 		f = request.FILES['contact_list']
 		contacts = f.readlines()
 		f.close()
+		user = request.user
+		for contact in contacts:
+			last_name = contact[0]
+			first_name = contact[1]
+			spouse_name = contact[2]
+			street_address = contact[3]
+			city = contact[4]
+			state = contact[5]
+			zip = contact[6]
+			phone_number = contact[7]
+			email_address = contact[8]
+
+			new_contact = Person(
+				last_name = last_name,
+				first_name = first_name,
+				spouse_name = spouse_name,
+				street_address = street_address,
+				city = city,
+				state = state,
+				zip = zip,
+				phone_number = phone_number,
+				email_address = email_address,
+				)
+
+			new_contact.save()
+
+			new_rel = ContactRelationship(
+				staff_person = user.userprofile,
+				stage = 'GET_INFO',
+				contact = new_contact,
+				)
+
+			new_rel.save()
+
+
+
 		context = {
 			'contacts':contacts,
 		}

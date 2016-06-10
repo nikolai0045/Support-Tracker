@@ -126,7 +126,7 @@ class ContactRelationship(models.Model):
 	contact = models.ForeignKey(Person)
 	referred_by = models.IntegerField(blank=True, null=True)
 	referral_note = models.CharField(max_length=500,blank=True)
-	date_added = models.DateField()
+	date_added = models.DateField(auto_now_add=True)
 	stage = models.CharField(max_length=255,choices=STAGE_OPTIONS)
 	
 class Letter(models.Model):
