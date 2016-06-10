@@ -3,6 +3,7 @@
 {% block content %}
 <div class='container'>
 	<form method='POST'>
+		{% csrf token %}
 		<input type='file' name='contact_list' />
 		<input type='submit' name='submit' value='Upload'/>
 	</form>
