@@ -1854,11 +1854,11 @@ class UploadContacts(View):
 
 	@method_decorator(login_required)
 	def post(self,request,*args,**kwargs):
-		
-		try:
-			f = request.FILES['contact_list']
-		except MultiValueDictKeyError:
+
+		if not request.FILES.get('contact_list',False):
 			return render(request,self.template)
+		else:
+			f = request.FILES['contact_list']
 
 		contacts = f.readlines()
 		f.close()
