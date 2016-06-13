@@ -1,6 +1,35 @@
 {% extends 'supporttracker/base.html' %}
 
 {% block content %}
+<script>
+$(function() {
+
+  // We can attach the `fileselect` event to all file inputs on the page
+  $(document).on('change', ':file', function() {
+    var input = $(this),
+        numFiles = input.get(0).files ? input.get(0).files.length : 1,
+        label = input.val().replace(/\\/g, '/').replace(/.*\//, '');
+    input.trigger('fileselect', [numFiles, label]);
+  });
+
+  // We can watch for our custom `fileselect` event like this
+  $(document).ready( function() {
+      $(':file').on('fileselect', function(event, numFiles, label) {
+
+          var input = $(this).parents('.input-group').find(':text'),
+              log = numFiles > 1 ? numFiles + ' files selected' : label;
+
+          if( input.length ) {
+              input.val(log);
+          } else {
+              if( log ) alert(log);
+          }
+
+      });
+  });
+  
+});
+</script>
 <div class='container'>
 	<h3>Instructions for uploading contacts:</h3>
 	<p>In an Excel file, placing one contact per line, plug in your contact information. The columns on your file must be in the following order (and you must have all of these columns, even if some of the entries are blank): First Name, Last Name, Spouse's Name, Street Address, City, State, ZIP, Phone Number, Email Address. If you don't put the columns in the correct order, the data will save in the wrong spot.</p>
@@ -8,7 +37,14 @@
 	<div class='col-md-4 col-md-offset-4 well' style='margin-top:15px'>
 		<form method='POST' enctype='multipart/form-data'>
 			{% csrf_token %}
-			<input type='file' style='margin-bottom:10px' name='contact_list' />
+            <div class="input-group">
+                <label class="input-group-btn">
+                    <span class="btn btn-primary">
+                        Browse&hellip; <input type="file" name='contact_list' style="display: none;" multiple>
+                    </span>
+                </label>
+                <input type="text" class="form-control" readonly>
+            </div>
 			<input type='submit' name='submit' value='Upload'/>
 		</form>
 	</div>
