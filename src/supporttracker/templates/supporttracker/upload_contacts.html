@@ -35,7 +35,7 @@ $(function() {
 	<p>In an Excel file, placing one contact per line, plug in your contact information. The columns on your file must be in the following order (and you must have all of these columns, even if some of the entries are blank): First Name, Last Name, Spouse's Name, Street Address, City, State, ZIP, Phone Number, Email Address. If you don't put the columns in the correct order, the data will save in the wrong spot.</p>
 	<p>Once you have put all the data in the Excel file, <b>save the file as a CSV file</b>. Do this by clicking "save as" and choosing CSV or Comma-Separated Values, from the file type option before saving. Once you have saved the file, you can upload it here and click submit.</p>
 	<div class='col-md-4 col-md-offset-4' style='margin-top:15px'>
-		<form method='POST' enctype='multipart/form-data'>
+		<form name='upload_contacts' method='POST' enctype='multipart/form-data'>
 			{% csrf_token %}
             <div class="input-group">
                 <label class="input-group-btn">
@@ -44,7 +44,9 @@ $(function() {
                     </span>
                 </label>
                 <input type="text" class="form-control" readonly>
-                <input type='submit' class='btn' name='submit' vlaue='Upload'/>
+                <span class='input-group-btn'>
+                	<button type='submit' form='upload_contacts' value='Upload'>Upload</button>
+	            </span>
             </div>
 		</form>
 	</div>
