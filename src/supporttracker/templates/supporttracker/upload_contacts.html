@@ -2,7 +2,9 @@
 
 {% block content %}
 <div class='container'>
-	<h3>Don't try to use this yet! I'm still working on it. It'll be done on Monday</h3>
+	<h3>Instructions for uploading contacts:</h3>
+	<p>In an Excel file, placing one contact per line, plug in your contact information. The columns on your file must be in the following order (and you must have all of these columns, even if some of the entries are blank): First Name, Last Name, Spouse's Name, Street Address, City, State, ZIP, Phone Number, Email Address. If you don't put the columns in the correct order, the data will save in the wrong spot.</p>
+	<p>Once you have put all the data in the Excel file, <b>save the file as a CSV file</b>. Do this by clicking "save as" and choosing CSV or Comma-Separated Values, from the file type option before saving. Once you have saved the file, you can upload it here and click submit.</p>
 	<form method='POST' enctype='multipart/form-data'>
 		{% csrf_token %}
 		<input type='file' name='contact_list' />
