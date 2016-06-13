@@ -1859,15 +1859,16 @@ class UploadContacts(View):
 		f.close()
 		user = request.user
 		for contact in contacts:
-			last_name = contact[0]
-			first_name = contact[1]
-			spouse_name = contact[2]
-			street_address = contact[3]
-			city = contact[4]
-			state = contact[5]
-			zip = contact[6]
-			phone_number = contact[7]
-			email_address = contact[8]
+			data = contact.split(',')
+			last_name = data[0]
+			first_name = data[1]
+			spouse_name = data[2]
+			street_address = data[3]
+			city = data[4]
+			state = data[5]
+			zip = data[6]
+			phone_number = data[7]
+			email_address = data[8].rstrip()
 
 			new_contact = Person(
 				last_name = last_name,
@@ -1890,6 +1891,8 @@ class UploadContacts(View):
 				)
 
 			new_rel.save()
+
+			return redirect(ContactListView.as_view())
 
 
 
