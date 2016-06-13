@@ -42,6 +42,7 @@
 				<th>Name</th>
 				<th>Phone Number</th>
 				<th>Address</th>
+				<th>Email</th>
 				<th>Stage</th>
 			</thead>
 			<tbody data-link="row" class="rowlink">
@@ -50,6 +51,7 @@
 						<td><a class='modalConnect' href="/{{rel.contact.pk}}/contact_info/" modal='#contactInfoModal'>{{rel.contact.first_name}} {% if rel.contact.spouse_name != None and rel.contact.spouse_name != '' %}and {{rel.contact.spouse_name}} {% endif %}{{rel.contact.last_name}}</a></td>
 						<td>{{rel.contact.phone_number}}</td>
 						<td>{{rel.contact.street_address}}</br>{{rel.contact.city}}{% if rel.contact.state != '' and rel.contact.zip != '' %}, {{rel.contact.state}} {{rel.contact.zip}}{%endif%}</td>
+						<td>{{rel.contact.email_address}}</td>
 						<td>{{rel.get_stage_display}}</td>
 					
 				</tr>
