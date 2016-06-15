@@ -1897,7 +1897,7 @@ class UploadContacts(View):
 
 			new_rel.save()
 
-			return redirect('/contact_list/')
+		return redirect('/contact_list/')
 
 
 
