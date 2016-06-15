@@ -1872,7 +1872,7 @@ class UploadContacts(View):
 			city = data[4]
 			state = data[5]
 			zip = data[6]
-			phone_number = data[7]
+			phone_number = data[7].replace('-','')
 			email_address = data[8].rstrip()
 
 			new_contact = Person(
