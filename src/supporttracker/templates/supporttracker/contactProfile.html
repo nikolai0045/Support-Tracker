@@ -3,7 +3,7 @@
 
 {% block content %}
 <div class="container">
-	<h2>{{rel.contact.first_name}} {%if rel.contact.spouse_name != '' and rel.contact.spouse_name != None%}and {{rel.contact.spouse_name}}{%endif%} {{rel.contact.last_name}}<span class='glyphicon glyphicon-pencil'></span></h2>
+	<span><h2>{{rel.contact.first_name}} {%if rel.contact.spouse_name != '' and rel.contact.spouse_name != None%}and {{rel.contact.spouse_name}}{%endif%} {{rel.contact.last_name}}</h2> <span class='glyphicon glyphicon-pencil'></span></span>
 	{% crispy delete_contact_form %}
 	<div class='col-md-4'>
 		<h3>Contact Info</h3>
