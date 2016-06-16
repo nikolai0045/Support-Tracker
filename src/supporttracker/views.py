@@ -1879,7 +1879,7 @@ class UploadContacts(View):
 			reader = csv.reader(f, delimiter=',')
 
 			user = request.user
-			for contact in reader:
+			for contact in reader[1:]:
 				first_name = contact[0]
 				last_name = contact[1]
 				spouse_name = contact[2]
