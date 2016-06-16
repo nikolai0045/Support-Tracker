@@ -1861,7 +1861,7 @@ class UploadContacts(View):
 		else:
 			f = request.FILES['contact_list']
 			reader = csv.reader(f, delimiter=',')
-			f.close()
+
 			user = request.user
 			for contact in reader:
 				last_name = contact[0]
@@ -1895,6 +1895,8 @@ class UploadContacts(View):
 					)
 
 				new_rel.save()
+
+			f.close()
 
 			return redirect('/contact_list/')
 
