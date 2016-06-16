@@ -1848,6 +1848,16 @@ class ContactsListView(BaseDatatableView):
 		if column == 'first_name':
 			pass
 
+class DeleteContact(View):
+
+	@method_decorator(login_required)
+	def post(self,request,*args,**kwargs):
+		rel_id = kwargs.get('rel_id')
+		rel = ContactRelationship.get(pk=rel_id)
+		rel.delete()
+		return redirect('/contact_list/')
+
+
 class UploadContacts(View):
 	template = 'supporttracker/upload_contacts.html'
 	@method_decorator(login_required)
