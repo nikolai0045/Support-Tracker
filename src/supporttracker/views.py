@@ -1877,10 +1877,15 @@ class UploadContacts(View):
 		else:
 			f = request.FILES['contact_list']
 			reader = csv.reader(f, delimiter=',')
-			reader.next()
+			reader_index = 0
 
 			user = request.user
-			for contact in reader[1:]:
+			for contact in reader:
+				if reader_index == 0:
+					reader.next()
+					reader_index = reader_index + 1
+				else:
+					reader_index = reader_index + 1
 				first_name = contact[0]
 				last_name = contact[1]
 				spouse_name = contact[2]
