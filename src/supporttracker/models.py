@@ -98,8 +98,6 @@ class Person(models.Model):
 	first_name = models.CharField(max_length=120)
 	last_name = models.CharField(max_length=120)
 	spouse_name = models.CharField(max_length=120, blank=True)
-	phone_number = PhoneNumberField(null=True,blank=True)
-	email_address = models.EmailField(blank=True)
 	street_address = models.CharField(max_length=200, blank=True)
 	city = models.CharField(max_length=100, blank=True)
 	state = models.CharField(null=True,max_length=2, choices=STATE_CHOICES, blank=True)
@@ -110,6 +108,22 @@ class Person(models.Model):
 			return self.first_name + " and " + self.spouse_name + ' ' + self.last_name
 		else:
 			return self.first_name + ' ' + self.last_name
+
+class ContactInformation(models.Model):
+	contact = models.ForeignKey(Person)
+
+class EmailAddress(ContactInformation):
+	email_address = models.EmailField()
+	nickname = models.CharField(max_length=15,blank=True)
+
+class PhoneNumber(ContactInformation):
+	phone_number = PhoneNumberField()
+	nickname = models.CharField(max_length=15,blank=True)
+
+class AdditionalInformation(ContactInformation):
+	field_name = models.CharField(max_length=20)
+	information = models.CharField(max_length=100)
+
 	
 class SupportRelationship(models.Model):
 	staff_person = models.ForeignKey(UserProfile)

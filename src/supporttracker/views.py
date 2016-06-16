@@ -6,11 +6,12 @@ from django.contrib.auth.models import User
 from django.contrib.auth import authenticate, login, update_session_auth_hash
 from django.contrib.auth.decorators import login_required
 from django.utils.decorators import method_decorator
-from .models import UserProfile, Person, SupportRelationship, ContactRelationship, ThankYou, Letter, Call, Meeting, VoiceMail, Reminder, Note, Message, FollowUp, Referral
+from .models import UserProfile, Person, SupportRelationship, ContactRelationship, ThankYou, Letter, Call, Meeting, VoiceMail, Reminder, Note, Message, FollowUp, Referral, EmailAddress, PhoneNumber, AdditionalInformation
 from .forms import AddContactForm, AddThankYouForm, AddLetterForm, RegisterGiftForm, RegisterCallForm, RegisterMeetingForm, RegisterVoiceMailForm, RecordMeetingModalForm, AddReminder, RecordCallModalForm, RecordFollowUpModalForm, UpdateReminderModalForm, RecordMessageModalForm, ScheduleMessageModalForm, ScheduleCallModalForm, ScheduleThankYouModalForm, RecordThankYouModalForm, ScheduleFollowUpModalForm, UpdateStageForm, LoginForm, AddReferralForm, ChangePasswordForm, CreateUserProfileForm
 from .decorators import profile_required
 import datetime
 import csv
+import string
 from functools import partial, wraps
 from django.contrib.auth.views import login as login_view
 from django.contrib.auth.views import logout as logout_view
@@ -1870,15 +1871,14 @@ class UploadContacts(View):
 				street_address = contact[3]
 				city = contact[4]
 				state = contact[5]
-				try:
-					zip = int(contact[6])
-				except ValueError:
-					zip = None
-				try:
-					phone_number = int(contact[7])
-				except ValueError:
-					phone_number = None
-				email_address = contact[8].rstrip()
+				zip = contact[6]
+				phone_numbers = []
+				raw_phone_numbers = contact[7].split('/')
+				all = string.maketrans('','')
+				nodigs = all.translate(all, string.digits)
+				for pn in raw_phone_numbers:
+					phone_numbers.append(pn.translate(all,nodigs))
+				email_addresses = contact[8].rstrip().split(' ')
 
 				new_contact = Person(
 					last_name = last_name,
@@ -1888,11 +1888,19 @@ class UploadContacts(View):
 					city = city,
 					state = state,
 					zip = zip,
-					phone_number = phone_number,
-					email_address = email_address,
 					)
 
 				new_contact.save()
+
+				for email in email_addresses:
+					if email != '':
+						new_email_address = EmailAddress(contact=new_contact,email_address=email)
+						new_email_address.save()
+
+				for pn in phone_numbers:
+					if pn != '':
+						new_phone_number = PhoneNumber(contact=new_contact,phone_number-pn)
+						new_phone_number.save()
 
 				new_rel = ContactRelationship(
 					staff_person = user.userprofile,
