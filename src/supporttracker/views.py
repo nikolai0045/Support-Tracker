@@ -1875,10 +1875,10 @@ class UploadContacts(View):
 				except ValueError:
 					zip = None
 				try:
-					phone_number = int(data[7])
+					phone_number = int(contact[7])
 				except ValueError:
 					phone_number = None
-				email_address = data[8].rstrip()
+				email_address = contact[8].rstrip()
 
 				new_contact = Person(
 					last_name = last_name,
