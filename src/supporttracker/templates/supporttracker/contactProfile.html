@@ -14,17 +14,14 @@
 				{% endfor %}
 			</ul>
 		</p>
-		<p>
-			<td>Street address</td>
-			<td>{{contact.street_address}}</td>
-		</p>
+		<p>Street address:{{rel.contact.street_address}}</p>
 		<p>City: {{rel.contact.city}}</p>
 		<p>State: {{rel.contact.state}}</p>
 		<p>ZIP: {{rel.contact.zip}}</p>
 		<p>Email addresses:<br/>
 			<ul>
 				{% for email in rel.contact.emailaddress_set.all %}
-					<li>{% if email.nickname %}{{email.nickname}}: {% endif %}{{email.emailaddress}}</li>
+					<li>{% if email.nickname %}{{email.nickname}}: {% endif %}{{email}}</li>
 				{% endfor %}
 			</ul>
 		<p>
