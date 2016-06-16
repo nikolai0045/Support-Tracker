@@ -1899,7 +1899,7 @@ class UploadContacts(View):
 
 				for pn in phone_numbers:
 					if pn != '':
-						new_phone_number = PhoneNumber(contact=new_contact,phone_number-pn)
+						new_phone_number = PhoneNumber(contact=new_contact,phone_number=pn)
 						new_phone_number.save()
 
 				new_rel = ContactRelationship(
