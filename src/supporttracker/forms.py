@@ -370,7 +370,7 @@ class DeleteContactForm(forms.Form):
 
 	def __init__(self,*args,**kwargs):
 
-		rel_id = kwargs.pop('rel_id')
+		rel_id = int(kwargs.pop('rel_id'))
 		super (DeleteContactForm,self).__init__(*args,**kwargs)
 		self.helper = FormHelper(self)
 		self.helper.form_id = 'delete_contact_form'
