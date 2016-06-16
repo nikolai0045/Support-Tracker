@@ -6,13 +6,11 @@
 	<div class='col-md-4'>
 		<h3>Contact Info</h3>
 		<p>Phone numbers:<br/>
-		{% if len(rel.contact.phonenumber_set.all) != 0 %}
 			<ul>
-				{% for pn in rel.contact.phonenumber_set.all %}
+				{% with rel.contact.phonenumber_set.all as pn %}
 					<li>{% if pn.nickname %}{{pn.nickname}}: {% endif %}{{pn.phone_number}}</li>
-				{% endfor %}
+				{% endwith %}
 			</ul>
-		{% endif }
 		</p>
 		<p>
 			<td>Street address</td>
@@ -22,13 +20,11 @@
 		<p>State: {{rel.contact.state}}</p>
 		<p>ZIP: {{rel.contact.zip}}</p>
 		<p>Email addresses:<br/>
-		{% if len(rel.contact.emailaddress_set.all) != 0 %}
 			<ul>
-				{% for email in rel.contact.emailaddress_set.all %}
+				{% with rel.contact.emailaddress_set.all as email %}
 					<li>{% if email.nickname %}{{email.nickname}}: {% endif %}{{email.emailaddress}}</li>
-				{% endfor %}
+				{% endwith %}
 			</ul>
-		{% endif %}
 		<p>
 		{% if contact_rel.referred_by != '' and contact_rel.referred_by != None %}
 		<p>Referred by: {{rel.referred_by}}</p>
