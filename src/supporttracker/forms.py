@@ -370,15 +370,16 @@ class DeleteContactForm(forms.Form):
 
 	def __init__(self,*args,**kwargs):
 
-		rel_id = kwargs.pop('rel_id')
+		rel_id = kwargs.pop('rel_id', False)
 		super (DeleteContactForm,self).__init__(*args,**kwargs)
 		self.helper = FormHelper(self)
 		self.helper.form_id = 'delete_contact_form'
 		self.helper.form_action = '/delete_contact/'
 		self.fields['rel_id'] = forms.IntegerField(
 				widget=forms.HiddenInput(),
-				initial=rel_id,
 			)
+		if rel_id:
+			self.fields['rel_id'].initial = rel_id
 		self.helper.layout = Layout(
 			Div(
 				'rel_id',

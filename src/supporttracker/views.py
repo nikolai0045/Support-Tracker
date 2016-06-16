@@ -1854,6 +1854,7 @@ class DeleteContact(View):
 
 	@method_decorator(login_required)
 	def post(self,request,*args,**kwargs):
+		form = DeleteContactForm(request.POST)
 		if form.is_valid():
 			data = form.cleaned_data
 			rel_id = data['rel_id']
