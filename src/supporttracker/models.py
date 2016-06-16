@@ -109,36 +109,24 @@ class Person(models.Model):
 		else:
 			return self.first_name + ' ' + self.last_name
 
-class ContactInformation(models.Model):
+class EmailAddress(models.Model):
 	contact = models.ForeignKey(Person)
-
-class EmailAddress(ContactInformation):
-	
-	def __init__(self):
-		super(EmailAddress,self).__init__(*args,**kwargs)
-
 	email_address = models.EmailField()
 	nickname = models.CharField(max_length=15,blank=True)
 
 	def __str__(self):
 		return email_address
 
-class PhoneNumber(ContactInformation):
-
-	def __init__(self,*args,**kwargs):
-		super(PhoneNumber,self).__init__(*args,**kwargs)
-
+class PhoneNumber(models.Model):
+	contact = models.ForeignKey(Person)
 	phone_number = PhoneNumberField()
 	nickname = models.CharField(max_length=15,blank=True)
 
 	def __str__(self):
 		return phone_number
 
-class AdditionalInformation(ContactInformation):
-
-	def __init__(self,*args,**kwargs):
-		super(AdditionalInformation,self).__init__(*args,**kwargs)
-
+class AdditionalInformation(models.Model):
+	contact = models.ForeignKey(Person)
 	field_name = models.CharField(max_length=20)
 	information = models.CharField(max_length=100)
 
