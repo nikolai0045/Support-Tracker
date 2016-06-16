@@ -3,7 +3,7 @@
 {% block content %}
 <div class="container">
 	<h2>{{rel.contact.first_name}} {%if rel.contact.spouse_name != '' and rel.contact.spouse_name != None%}and {{rel.contact.spouse_name}}{%endif%} {{rel.contact.last_name}}</h2>
-	{% crispy delete_contact_form %}
+	{{ crispy delete_contact_form }}
 	<div class='col-md-4'>
 		<h3>Contact Info</h3>
 		<p>Phone numbers:<br/>
