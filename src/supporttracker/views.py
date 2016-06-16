@@ -1853,7 +1853,7 @@ class DeleteContact(View):
 	@method_decorator(login_required)
 	def post(self,request,*args,**kwargs):
 		rel_id = kwargs.get('rel_id')
-		rel = ContactRelationship.get(pk=rel_id)
+		rel = ContactRelationship.objects.get(pk=rel_id)
 		rel.delete()
 		return redirect('/contact_list/')
 
