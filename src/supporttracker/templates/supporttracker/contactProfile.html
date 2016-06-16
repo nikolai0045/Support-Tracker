@@ -5,7 +5,15 @@
 	<h2>{{rel.contact.first_name}} {%if rel.contact.spouse_name != '' and rel.contact.spouse_name != None%}and {{rel.contact.spouse_name}}{%endif%} {{rel.contact.last_name}}</h2>
 	<div class='col-md-4'>
 		<h3>Contact Info</h3>
-		<p>Phone number: {{rel.contact.phone_number}}</p>
+		<p>Phone numbers:<br/>
+		{% if len(rel.contact.phonenumber_set.all) != 0 %}
+			<ul>
+				{% for pn in rel.contact.phonenumber_set.all %}
+					<li>{% if pn.nickname %}{{pn.nickname}}: {% endif %}{{pn.phone_number}}</li>
+				{% endfor %}
+			</ul>
+		{% endif }
+		</p>
 		<p>
 			<td>Street address</td>
 			<td>{{contact.street_address}}</td>
@@ -13,7 +21,15 @@
 		<p>City: {{rel.contact.city}}</p>
 		<p>State: {{rel.contact.state}}</p>
 		<p>ZIP: {{rel.contact.zip}}</p>
-		<p>Email: {{rel.contact.email_address}}<p>
+		<p>Email addresses:<br/>
+		{% if len(rel.contact.emailaddress_set.all) != 0 %}
+			<ul>
+				{% for email in rel.contact.emailaddress_set.all %}
+					<li>{% if email.nickname %}{{email.nickname}}: {% endif %}{{email.emailaddress}}</li>
+				{% endfor %}
+			</ul>
+		{% endif %}
+		<p>
 		{% if contact_rel.referred_by != '' and contact_rel.referred_by != None %}
 		<p>Referred by: {{rel.referred_by}}</p>
 		<p>Referral note: {{rel.referral_note}}</p>
