@@ -16,7 +16,7 @@ Including another URLconf
 from django.conf.urls import patterns, url
 from django.contrib import admin
 import supporttracker.views as views
-from supporttracker.views import user_profile_view, supporters_list_view, supporter_profile_view, new_person, new_contact, new_thank_you, new_letter, new_gift, new_call, new_meeting, new_voice_mail
+from supporttracker.views import user_profile_view, supporters_list_view, supporter_profile_view, new_contact, new_thank_you, new_letter, new_gift, new_call, new_meeting, new_voice_mail
 from django.contrib.auth.views import login as login_view
 from django.contrib.auth.views import logout as logout_view
 
