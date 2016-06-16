@@ -1,9 +1,9 @@
-# from __future__ import unicode_literals
+from __future__ import unicode_literals
 
-# from django.db import models
-# from django.contrib.auth.models import User
+from django.db import models
+from django.contrib.auth.models import User
 # from localflavor.us.models import PhoneNumberField
-# import datetime
+import datetime
 
 # STATE_CHOICES = (
 # ('',''),
