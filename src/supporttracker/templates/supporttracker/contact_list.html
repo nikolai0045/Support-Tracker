@@ -44,6 +44,7 @@
 				<th>Address</th>
 				<th>Email</th>
 				<th>Stage</th>
+				<th></th>
 			</thead>
 			<tbody data-link="row" class="rowlink">
 			{% for rel in rels %}
@@ -61,7 +62,7 @@
 						{% endfor %}
 						</td>
 						<td>{{rel.get_stage_display}}</td>
-					
+						<td><span class='glyphicon glyphicon-pencil'></span></td>					
 				</tr>
 			{% endfor %}
 			
