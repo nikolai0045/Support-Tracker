@@ -8,7 +8,7 @@
 	<tr>
 			<td>{{fup.contact.first_name}} {% if fup.contact.spouse_name != None and fup.contact.spouse_name != '' %}and {{fup.contact.spouse_name}} {% endif %}{{fup.contact.last_name}}</td>
 			<td>						
-			{% for pn in fup.contact.phonenumber_set %}
+			{% for pn in fup.contact.phonenumber_set.all %}
 				<p>{{pn}}</p>
 			{% endfor %}
 			</td>	

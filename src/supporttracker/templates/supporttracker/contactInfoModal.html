@@ -17,7 +17,7 @@
 						<tr>
 							<td>Phone number</td>
 							<td>
-							{% for pn in contact.phonenumber_set %}
+							{% for pn in contact.phonenumber_set.all %}
 								<p>{% if pn.nickname %}{{pn.nickname}}:{% endif %}{{pn}}</p>
 							{% endfor %}
 							</td>
@@ -41,7 +41,7 @@
 						<tr>
 							<td>Email address</td>
 							<td>
-								{% for email in contact.emailaddress_set %}
+								{% for email in contact.emailaddress_set.all %}
 									<p>{% if email.nickname %}{{email.nickname}}:{% endif %}{{email}}</p>
 								{% endfor %}
 							</td>
