@@ -366,7 +366,30 @@ class UpdateStageForm(forms.Form):
 		)
 				
 		
-		
+class DeleteContactForm(forms.Form):
+
+	def __init__(self,*args,**kwargs):
+
+		rel_id = kwargs.pop('rel_id')
+		super (DeleteContactForm,self).__init__(*args,**kwargs)
+		self.helper = FormHelper(self)
+		self.helper.form_id = 'delete_contact_form'
+		self.helper.form_action = '/delete_contact/'
+		self.fields['rel_id'] = forms.IntegerField(
+				widget=forms.HiddenInput(),
+				initial=rel_id,
+			)
+		self.helper.layout = Layout(
+			Div(
+				'rel_id',
+			),
+			FormActions(
+				Submit('submit', 'Delete Contact', css_class='btn btn-default')
+			)
+		)
+
+
+
 
 class RecordMeetingModalForm(forms.Form):
 	

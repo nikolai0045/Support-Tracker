@@ -7,7 +7,7 @@ from django.contrib.auth import authenticate, login, update_session_auth_hash
 from django.contrib.auth.decorators import login_required
 from django.utils.decorators import method_decorator
 from .models import UserProfile, Person, SupportRelationship, ContactRelationship, ThankYou, Letter, Call, Meeting, VoiceMail, Reminder, Note, Message, FollowUp, Referral, EmailAddress, PhoneNumber, AdditionalInformation
-from .forms import AddContactForm, AddThankYouForm, AddLetterForm, RegisterGiftForm, RegisterCallForm, RegisterMeetingForm, RegisterVoiceMailForm, RecordMeetingModalForm, AddReminder, RecordCallModalForm, RecordFollowUpModalForm, UpdateReminderModalForm, RecordMessageModalForm, ScheduleMessageModalForm, ScheduleCallModalForm, ScheduleThankYouModalForm, RecordThankYouModalForm, ScheduleFollowUpModalForm, UpdateStageForm, LoginForm, AddReferralForm, ChangePasswordForm, CreateUserProfileForm
+from .forms import AddContactForm, AddThankYouForm, AddLetterForm, RegisterGiftForm, RegisterCallForm, RegisterMeetingForm, RegisterVoiceMailForm, RecordMeetingModalForm, AddReminder, RecordCallModalForm, RecordFollowUpModalForm, UpdateReminderModalForm, RecordMessageModalForm, ScheduleMessageModalForm, ScheduleCallModalForm, ScheduleThankYouModalForm, RecordThankYouModalForm, ScheduleFollowUpModalForm, UpdateStageForm, LoginForm, AddReferralForm, ChangePasswordForm, CreateUserProfileForm, DeleteContactForm
 from .decorators import profile_required
 import datetime
 import csv
@@ -361,6 +361,7 @@ class ContactProfileView(View):
 		
 		gifts = SupportRelationship.objects.filter(staff_person=request.user.userprofile,supporter=rel.contact)
 
+		delete_contact_form = DeleteContactForm(rel_id=rel_id)
 		
 		context = {
 			'rel':rel,
@@ -371,6 +372,7 @@ class ContactProfileView(View):
 			'thank_yous':thank_yous,
 			'reminders':reminders,
 			'gifts':gifts,
+			'delete_contact_form':delete_contact_form,
 		}
 		
 		return render(request,self.template,context)
