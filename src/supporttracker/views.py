@@ -1870,8 +1870,14 @@ class UploadContacts(View):
 				street_address = contact[3]
 				city = contact[4]
 				state = contact[5]
-				zip = int(contact[6])
-				phone_number = int(data[7])
+				try:
+					zip = int(contact[6])
+				except ValueError:
+					zip = None
+				try:
+					phone_number = int(data[7])
+				except ValueError:
+					phone_number = None
 				email_address = data[8].rstrip()
 
 				new_contact = Person(
