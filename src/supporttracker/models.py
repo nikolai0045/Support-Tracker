@@ -113,6 +113,10 @@ class ContactInformation(models.Model):
 	contact = models.ForeignKey(Person)
 
 class EmailAddress(ContactInformation):
+	
+	def __init__(self):
+		super(EmailAddress,self).__init__(*args,**kwargs)
+
 	email_address = models.EmailField()
 	nickname = models.CharField(max_length=15,blank=True)
 
@@ -120,6 +124,10 @@ class EmailAddress(ContactInformation):
 		return email_address
 
 class PhoneNumber(ContactInformation):
+
+	def __init__(self,*args,**kwargs):
+		super(PhoneNumber,self).__init__(*args,**kwargs)
+
 	phone_number = PhoneNumberField()
 	nickname = models.CharField(max_length=15,blank=True)
 
@@ -127,6 +135,10 @@ class PhoneNumber(ContactInformation):
 		return phone_number
 
 class AdditionalInformation(ContactInformation):
+
+	def __init__(self,*args,**kwargs):
+		super(AdditionalInformation,self).__init__(*args,**kwargs)
+
 	field_name = models.CharField(max_length=20)
 	information = models.CharField(max_length=100)
 
