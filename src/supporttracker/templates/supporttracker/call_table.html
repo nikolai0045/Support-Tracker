@@ -10,7 +10,11 @@
 	{% for call in calls %}
 		<tr id="callRow{{call.pk}}">
 				<td>{{call.contact.first_name}} {% if call.contact.spouse_name != None and call.contact.spouse_name != '' %}and {{call.contact.spouse_name}} {% endif %}{{call.contact.last_name}}</td>
-				<td>{{call.contact.phone_number}}</td>	
+				<td>
+				{% for pn in call.contact.phonenumber_set %}
+					<p>{{pn}}</p>
+				{% endfor %}
+				</td>	
 				<td></td>
 				<td></td>
 				<td></td>

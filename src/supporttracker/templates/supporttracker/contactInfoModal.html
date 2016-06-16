@@ -16,7 +16,11 @@
 						</tr>
 						<tr>
 							<td>Phone number</td>
-							<td>{{contact.phone_number}}</td>
+							<td>
+							{% for pn in contact.phonenumber_set %}
+								<p>{% if pn.nickname %}{{pn.nickname}}:{% endif %}{{pn}}</p>
+							{% endfor %}
+							</td>
 						</tr>
 						<tr>
 							<td>Street address</td>
@@ -36,7 +40,11 @@
 						</tr>
 						<tr>
 							<td>Email address</td>
-							<td>{{contact.email_address}}</td>
+							<td>
+								{% for email in contact.emailaddress_set %}
+									<p>{% if email.nickname %}{{email.nickname}}:{% endif %}{{email}}</p>
+								{% endfor %}
+							</td>
 						</tr>
 						{% if contact_rel.referred_by != '' and contact_rel.referred_by != None %}
 						<tr>

@@ -116,9 +116,15 @@ class EmailAddress(ContactInformation):
 	email_address = models.EmailField()
 	nickname = models.CharField(max_length=15,blank=True)
 
+	def __str__(self):
+		return email_address
+
 class PhoneNumber(ContactInformation):
 	phone_number = PhoneNumberField()
 	nickname = models.CharField(max_length=15,blank=True)
+
+	def __str__(self):
+		return phone_number
 
 class AdditionalInformation(ContactInformation):
 	field_name = models.CharField(max_length=20)
