@@ -1859,44 +1859,44 @@ class UploadContacts(View):
 		if not request.FILES.get('contact_list',False):
 			return render(request,self.template)
 		else:
-			with open(request.FILES['contact_list'],'rb') as f:
+			f = request.FILES['contact_list']
+			reader = csv.reader(f, delimiter=',')
+			f.close()
+			user = request.user
+			for contact in reader:
+				last_name = contact[0]
+				first_name = contact[1]
+				spouse_name = contact[2]
+				street_address = contact[3]
+				city = contact[4]
+				state = contact[5]
+				zip = int(contact[6])
+				phone_number = int(data[7])
+				email_address = data[8].rstrip()
 
-				reader = csv.reader(f, delimiter=',')
-				user = request.user
-				for contact in reader:
-					last_name = contact[0]
-					first_name = contact[1]
-					spouse_name = contact[2]
-					street_address = contact[3]
-					city = contact[4]
-					state = contact[5]
-					zip = int(contact[6])
-					phone_number = int(data[7])
-					email_address = data[8].rstrip()
+				new_contact = Person(
+					last_name = last_name,
+					first_name = first_name,
+					spouse_name = spouse_name,
+					street_address = street_address,
+					city = city,
+					state = state,
+					zip = zip,
+					phone_number = phone_number,
+					email_address = email_address,
+					)
 
-					new_contact = Person(
-						last_name = last_name,
-						first_name = first_name,
-						spouse_name = spouse_name,
-						street_address = street_address,
-						city = city,
-						state = state,
-						zip = zip,
-						phone_number = phone_number,
-						email_address = email_address,
-						)
+				new_contact.save()
 
-					new_contact.save()
+				new_rel = ContactRelationship(
+					staff_person = user.userprofile,
+					stage = 'GET_INFO',
+					contact = new_contact,
+					)
 
-					new_rel = ContactRelationship(
-						staff_person = user.userprofile,
-						stage = 'GET_INFO',
-						contact = new_contact,
-						)
+				new_rel.save()
 
-					new_rel.save()
-
-				return redirect('/contact_list/')
+			return redirect('/contact_list/')
 
 
 
