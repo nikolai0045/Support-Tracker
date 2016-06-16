@@ -23,9 +23,9 @@
 		<p>ZIP: {{rel.contact.zip}}</p>
 		<p>Email addresses:<br/>
 			<ul>
-				{% with rel.contact.emailaddress_set.all as email %}
+				{% for email in rel.contact.emailaddress_set.all %}
 					<li>{% if email.nickname %}{{email.nickname}}: {% endif %}{{email.emailaddress}}</li>
-				{% endwith %}
+				{% endfor %}
 			</ul>
 		<p>
 		{% if contact_rel.referred_by != '' and contact_rel.referred_by != None %}
