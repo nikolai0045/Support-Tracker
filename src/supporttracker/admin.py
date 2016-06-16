@@ -2,7 +2,7 @@ from django.contrib import admin
 from django.contrib.auth.admin import UserAdmin as BaseUserAdmin
 from django.contrib.auth.models import User
 
-from .models import Person, UserProfile, SupportRelationship, ContactRelationship, Letter, Call, Meeting, ThankYou, VoiceMail, Referral, Reminder, Note, Message, PhoneNumber, EmailAddress
+#from .models import Person, UserProfile, SupportRelationship, ContactRelationship, Letter, Call, Meeting, ThankYou, VoiceMail, Referral, Reminder, Note, Message, PhoneNumber, EmailAddress
 
 class UserProfileInline(admin.StackedInline):
 	model = UserProfile
