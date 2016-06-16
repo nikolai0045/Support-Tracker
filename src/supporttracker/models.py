@@ -115,7 +115,7 @@ class EmailAddress(models.Model):
 	nickname = models.CharField(max_length=15,blank=True)
 
 	def __str__(self):
-		return email_address
+		return self.email_address
 
 class PhoneNumber(models.Model):
 	contact = models.ForeignKey(Person)
@@ -123,7 +123,7 @@ class PhoneNumber(models.Model):
 	nickname = models.CharField(max_length=15,blank=True)
 
 	def __str__(self):
-		return phone_number
+		return self.phone_number
 
 class AdditionalInformation(models.Model):
 	contact = models.ForeignKey(Person)
