@@ -1865,8 +1865,8 @@ class UploadContacts(View):
 
 			user = request.user
 			for contact in reader:
-				last_name = contact[0]
-				first_name = contact[1]
+				first_name = contact[0]
+				last_name = contact[1]
 				spouse_name = contact[2]
 				street_address = contact[3]
 				city = contact[4]
