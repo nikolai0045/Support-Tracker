@@ -9,9 +9,9 @@
 		<h3>Contact Info</h3>
 		<p>Phone numbers:<br/>
 			<ul>
-				{% with rel.contact.phonenumber_set.all as pn %}
+				{% for pn in phone_numbers %}
 					<li>{% if pn.nickname %}{{pn.nickname}}: {% endif %}{{pn.phone_number}}</li>
-				{% endwith %}
+				{% endfor %}
 			</ul>
 		</p>
 		<p>

@@ -351,6 +351,8 @@ class ContactProfileView(View):
 	def get(self,request,**kwargs):
 		rel_id = self.kwargs.pop('contact_rel_id',None)
 		rel = ContactRelationship.objects.get(pk=rel_id)
+
+		phone_numbers = rel.contact.phonenumber_set.all()
 		
 		meetings = Meeting.objects.filter(staff_person=request.user.userprofile,contact=rel.contact).filter(completed=True).order_by('date','time')
 		calls = Call.objects.filter(staff_person=request.user.userprofile,contact=rel.contact).filter(completed=True).order_by('date','time')
@@ -373,6 +375,7 @@ class ContactProfileView(View):
 			'reminders':reminders,
 			'gifts':gifts,
 			'delete_contact_form':delete_contact_form,
+			'phone_numbers':phone_numbers,
 		}
 		
 		return render(request,self.template,context)
