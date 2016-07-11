@@ -2700,7 +2700,7 @@ class UpdatePhoneNumbersAjaxView(View):
 		contact = Person.objects.get(pk=contact_id)
 
 		if phone_number_formset.is_valid():
-			user_phone_numbers = PhoneNumber.objects.get(contact=contact)
+			user_phone_numbers = PhoneNumber.objects.filter(contact=contact)
 			for pn in user_phone_numbers:
 				pn.delete()
 			for form in phone_number_formset:
@@ -2766,7 +2766,7 @@ class UpdateEmailsAjaxView(View):
 		contact = Person.objects.get(pk=contact_id)
 
 		if email_formset.is_valid():
-			user_emails = EmailAddress.objects.get(contact=contact)
+			user_emails = EmailAddress.objects.filter(contact=contact)
 			for e in user_emails:
 				e.delete()
 			for form in email_formset:
