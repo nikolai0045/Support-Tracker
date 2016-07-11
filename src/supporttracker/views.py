@@ -1,13 +1,15 @@
 from django.shortcuts import render, redirect, render_to_response, get_object_or_404
-from django.db import models
+from django.db import models, IntegrityError, transaction
 from django.http import HttpResponse
 from django.core.urlresolvers import reverse
+from django.template.context_processors import csrf
+from django.contrib import messages
 from django.contrib.auth.models import User
 from django.contrib.auth import authenticate, login, update_session_auth_hash
 from django.contrib.auth.decorators import login_required
 from django.utils.decorators import method_decorator
 from .models import UserProfile, Person, SupportRelationship, ContactRelationship, ThankYou, Letter, Call, Meeting, VoiceMail, Reminder, Note, Message, FollowUp, Referral, EmailAddress, PhoneNumber, AdditionalInformation
-from .forms import AddContactForm, AddThankYouForm, AddLetterForm, RegisterGiftForm, RegisterCallForm, RegisterMeetingForm, RegisterVoiceMailForm, RecordMeetingModalForm, AddReminder, RecordCallModalForm, RecordFollowUpModalForm, UpdateReminderModalForm, RecordMessageModalForm, ScheduleMessageModalForm, ScheduleCallModalForm, ScheduleThankYouModalForm, RecordThankYouModalForm, ScheduleFollowUpModalForm, UpdateStageForm, LoginForm, AddReferralForm, ChangePasswordForm, CreateUserProfileForm, DeleteContactForm
+from .forms import AddContactForm, AddThankYouForm, AddLetterForm, RegisterGiftForm, RegisterCallForm, RegisterMeetingForm, RegisterVoiceMailForm, RecordMeetingModalForm, AddReminder, RecordCallModalForm, RecordFollowUpModalForm, UpdateReminderModalForm, RecordMessageModalForm, ScheduleMessageModalForm, ScheduleCallModalForm, ScheduleThankYouModalForm, RecordThankYouModalForm, ScheduleFollowUpModalForm, UpdateStageForm, LoginForm, AddReferralForm, ChangePasswordForm, CreateUserProfileForm, DeleteContactForm, UpdatePhoneNumberForm, BasePhoneNumberFormset, UpdateContactInfoForm, BaseEmailFormset, UpdateEmailForm
 from .decorators import profile_required
 import datetime
 import csv
@@ -20,6 +22,7 @@ from django.views.generic import View
 from django.forms.formsets import formset_factory
 from django_datatables_view.base_datatable_view import BaseDatatableView
 import json
+from jsonview.decorators import json_view
 
 def processStageUpdate(rel,data,user):
 	rel.stage = data['new_stage']
@@ -2612,3 +2615,204 @@ def edit_voice_mail(request,voice_mail_id):
 		
 	form.order_fields(['contact','date','note'])
 	return render(request, 'supporttracker/new_voice_mail.html',{'form':form})
+
+##AJAX views
+
+#Form handlers
+class UpdateInfoAjaxView(View):
+	template = 'supporttracker/ajax_forms/update_contact_info.html'
+
+	def get(self,request,*args,**kwargs):
+
+		contact_id = kwargs.pop('contact_id')
+		form = UpdateContactInfoForm(contact_id=contact_id)
+		context = {
+			'form':form,
+		}
+		return render(request,self.template,context)
+
+	def post_logic(self,request,*args,**kwargs):
+
+		contact_id = kwargs.pop('contact_id')
+		form = UpdateContactInfoForm(request.POST,contact_id=contact_id)
+		contact = Person.objects.get(pk=contact_id)
+		if form.is_valid():
+			data = form.cleaned_data
+			title = data['title']
+			first_name = data['first_name']
+			last_name = data['last_name']
+			spouse_name = data['spouse_name']
+			street_address = data['street_address']
+			city = data['city']
+			state = data['state']
+			zip = data['zip']
+
+			contact.title = title
+			contact.first_name = first_name
+			contact.last_name = last_name
+			contact.spouse_name = spouse_name
+			contact.street_address = street_address
+			contact.city = city
+			contact.state = state
+			contact.zip = zip
+
+			contact.save()
+
+			return ['redirect',update_info_view(request,contact=contact)]
+
+		context = {
+		'form':form,
+		}
+		return ['context',context]
+
+	def post(self,request,*args,**kwargs):
+		post_logic_return = self.post_logic(request,*args,**kwargs)
+		if post_logic_return[0] == 'redirect':
+			return post_logic_return[1]
+		if post_logic_return[0] == 'context':
+			context = post_logic_return[1]
+			return render(request,self.template,context)
+
+class UpdatePhoneNumbersAjaxView(View):
+	template = 'supporttracker/ajax_forms/update_phone_numbers.html'
+
+	def get(self,request,*args,**kwargs):
+		contact_id = kwargs.pop('contact_id')
+		contact = Person.objects.get(pk=contact_id)
+		user = request.user
+
+		PhoneNumberFormSet = formset_factory(UpdatePhoneNumberForm, formset=BasePhoneNumberFormset)
+
+		user_phone_numbers = PhoneNumber.objects.get(contact=contact)
+		phone_number_data = [{'nickname':n.nickname,'phone_number':n.phone_number} for n in user_phone_numbers]
+
+		phone_number_formset = PhoneNumberFormSet(initial=phone_number_data)
+
+		context = {
+			'formset':phone_number_formset,
+		}
+
+		return render(request,self.template,context)
+
+	def post_logic(self,request,*args,**kwargs):
+		PhoneNumberFormSet = formset_factory(UpdatePhoneNumberForm, formset=BasePhoneNumberFormset)
+		phone_number_formset = PhoneNumberFormSet(request.POST)
+
+		if phone_number_formset.is_valid():
+			user_phone_numbers = PhoneNumber.objects.get(contact=contact)
+			for pn in user_phone_numbers:
+				pn.delete()
+			for form in phone_number_formset:
+				data = form.cleaned_data
+
+				phone_number = data['phone_number']
+				nickname = data['nickname']
+
+				new_phone_number = PhoneNumber(
+					phone_number = phone_number,
+					nickname = nickname,
+					contact = contact,
+					)
+
+				new_phone_number.save()
+
+			return ['redirect',update_phone_numbers_view(request,contact=contact)]
+
+		context = {
+		'formset':phone_number_formset,
+		}
+
+		return ['context',context]
+
+	def post(self,request,*args,**kwargs):
+		post_logic_return = self.post_logic(request,*args,**kwargs)
+		if post_logic_return[0] == 'redirect':
+			return post_logic_return[1]
+		if post_logic_return[0] == 'context':
+			context = post_logic_return[1]
+			return render(request,self.template,context)
+
+class UpdateEmailsAjaxView(View):
+	template = 'supporttracker/ajax_forms/ajax_formset.html'
+
+	def get(self,request,*args,**kwargs):
+		contact_id = kwargs.pop('contact_id')
+		contact = Person.objects.get(pk=contact_id)
+		user = request.user
+
+		EmailFormset = formset_factory(UpdateEmailForm, formset=BaseEmailFormset)
+
+		user_emails = EmailAddress.objects.get(contact=contact)
+		email_data = [{'nickname':e.nickname, 'email'.e.email_address} for e in user_emails]
+
+		email_formset = EmailFormset(initial=email_data)
+
+		context = {
+		'formset':email_formset
+		}
+
+		return render(request,self.template,context)
+
+	def post_logic(self,request,*args,**kwargs):
+		EmailFormset = formset_factory(UpdateEmailForm, formset=BaseEmailFormset)
+		email_formset = EmailFormset(request.POST)
+
+		if email_formset.is_valid():
+			user_emails = EmailAddress.objects.get(contact=contact)
+			for e in user_emails:
+				e.delete()
+			for form in email_formset:
+				data = form.cleaned_data
+
+				new_email = EmailAddress(
+					email_address = data['email_address'],
+					nickname = data['nickname'],
+					contact = contact,
+					)
+
+				new_email.save()
+
+			return ['redirect',update_emails_view(request,contact=contact)]
+
+		context = {
+		'formset':email_formset,
+		'header':'Update Emails',
+		}
+
+		return ['context',context]
+
+	def post(self,request,*args,**kwargs):
+		post_logic_return = self.post_logic(request,*args,**kwargs)
+		if post_logic_return[0] == 'redirect':
+			return post_logic_return[1]
+		if post_logic_return[0] == 'context':
+			context = post_logic_return[1]
+			return render(request,self.template,context)
+
+#snippet handlers
+def update_info_view(request,*args,**kwargs):
+	contact = kwargs.pop('contact')
+	rel = ContactRelationship.get(contact=contact,staff_person=request.user)
+	template = 'supporttracker/snippets/contact_info_snippet.html'
+	context = {
+		'rel'=rel,
+	}
+	return render(request,template,context)
+
+def update_phone_numbers_view(request,*args,**kwargs):
+	contact = kwargs.pop('contact')
+	rel = ContactRelationship(contact=contact,staff_person=request.user)
+	template = 'supporttracker/snippets/contact_phone_numbers_snippet.html'
+	context = {
+		'rel'=rel,
+	}
+	return render(request,template,context)
+
+def update_emails_view(request,*args,**kwargs):
+	contact = kwargs.pop('contact')
+	rel = ContactRelationship(contact=contact,staff_person=request.user)
+	template = 'supporttracker/snippets/contact_emails_snippet.html'
+	context = {
+	'rel'=rel,
+	}
+	return render(request,template,context)

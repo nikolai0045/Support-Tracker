@@ -1,30 +1,89 @@
 {% extends "supporttracker/base.html" %}
 {% load crispy_forms_tags %}
+{% block scripts %}
+<script type="text/javascript">
+	$(document).ready(function() {
+		modalConnect();
+	});
+</script>
+<script type="text/javascript">
+	$(document).ajaxStop(function(){
+		modalConnect();
+	});
+</script>
+<script type="text/javascript">
+	function modalConnect(){
+		$(".modalConnect").unbind('click');
+		$(".modalConnect").click(function(ev){
+			ev.preventDefault();
+			var url = this.href;
+			var div_to_update = $(this).attr('div_to_update');
+			var modal = $(this).attr('modal');
+			$.get(url, function(data){
+				var form = $("#ajax_form_modal_result",data);
+				$(modal).empty().append(form);
+				$(modal).modal({show:true});
+				$(document).ready(function(){
+					console.log(div_to_update);
+					submitModalFormBind(url,modal,div_to_update);
+				});
+			}, "html");
+			return false;
+		});
+	}
+	
+</script>
+<script type="text/javascript">
+	function submitModalFormBind(url,modal,div){
+        $(modal + ',#ajax_form_modal_result').submit(function(ev){
+            $.ajax({
+                type: "POST",
+                url: url,
+                data: $(this).serialize(),
+                success:function(response, textStatus, jqXHR){
+                    var form = $("#ajax_form_modal_result_div", response);
+                    if (form.html()) {
+                        $('#ajax_form_modal_result_div').html(form);
+                        $(modal).modal('show');
+                    }
+                    else{
+                        $(div).empty().append(response);
+						$(modal).empty();
+                        $(modal).modal('hide');
+                    }
+                },
+                error: function (request, status, error) {
+                            var div = $("ajax_form_modal_result_div", request.responseText);
+                            $(modal + ',#ajax_form_modal_result_div').html(div);
+                            console.log("failure");
+                            console.log(request.responseText);
+                        }
+            });
+            return false;
+        });
+    }
+</script>
+{% endblock scripts %}
 
 {% block content %}
+<div id="UpdateInfoFormModal" class="modal fade" role="dialog"></div>
+<div id="UpdatePhoneNumberFormModal" class='modal fade' role='dialog'></div>
+<div id="UpdateEmailFormModal" class='modal fade' role='dialog'></div>
+
 <div class="container">
-	<span><h2>{{rel.contact.first_name}} {%if rel.contact.spouse_name != '' and rel.contact.spouse_name != None%}and {{rel.contact.spouse_name}}{%endif%} {{rel.contact.last_name}}</h2> <span class='glyphicon glyphicon-pencil'></span></span>
+	<h2>{{rel.contact.first_name}} {%if rel.contact.spouse_name != '' and rel.contact.spouse_name != None%}and {{rel.contact.spouse_name}}{%endif%} {{rel.contact.last_name}}</h2>
 	{% crispy delete_contact_form %}
 	<div class='col-md-4'>
 		<h3>Contact Info</h3>
-		<p>Phone numbers:<br/>
-			<ul>
-				{% for pn in phone_numbers %}
-					<li>{% if pn.nickname %}{{pn.nickname}}: {% endif %}{{pn.phone_number}}</li>
-				{% endfor %}
-			</ul>
-		</p>
-		<p>Street address:{{rel.contact.street_address}}</p>
-		<p>City: {{rel.contact.city}}</p>
-		<p>State: {{rel.contact.state}}</p>
-		<p>ZIP: {{rel.contact.zip}}</p>
-		<p>Email addresses:<br/>
-			<ul>
-				{% for email in rel.contact.emailaddress_set.all %}
-					<li>{% if email.nickname %}{{email.nickname}}: {% endif %}{{email}}</li>
-				{% endfor %}
-			</ul>
-		<p>
+		<div id='InfoDiv'>
+			{% include 'supporttracker/snippets/contact_info_snippet.html' %}
+		</div>
+		<div id='PhoneNumberDiv'>
+			{% include 'supporttracker/snippets/contact_phone_numbers_snippet.html' %}
+		</div>
+		<div id='EmailDiv'>
+			{% include 'supporttracker/snippets/contact_email_snippet.html' %}
+		</div>
 		{% if contact_rel.referred_by != '' and contact_rel.referred_by != None %}
 		<p>Referred by: {{rel.referred_by}}</p>
 		<p>Referral note: {{rel.referral_note}}</p>

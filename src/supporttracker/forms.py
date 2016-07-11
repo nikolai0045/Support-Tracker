@@ -1,4 +1,5 @@
 from django import forms
+from django.forms.formsets import BaseFormSet
 from .models import Person, STATE_CHOICES, STAGE_OPTIONS, FREQ_OPTIONS, ContactRelationship, Call, FollowUp, ThankYou, UserProfile
 from django.contrib.auth.models import User
 from django.contrib.auth.forms import AuthenticationForm, PasswordChangeForm
@@ -1360,7 +1361,103 @@ class RegisterVoiceMailForm(forms.Form):
 	required=False
 	)
 
-	
+
+##UPDATE##
+
+###Update formsets###
+class BasePhoneNumberFormset(BaseFormSet):
+	def clean(self):
+
+		if any(self.errors):
+			return
+
+		numbers = []
+		nicknames = []
+		duplicates = False
+
+		for form in self.forms:
+			if form.cleaned_data:
+				number = form.cleaned_data['phone_number']
+				nickname = form.cleaned_data['nickname']
+
+				if number and nickname:
+					if number in numbers:
+						duplicates = True
+					numbers.append(number)
+
+					if nickname in nicknames:
+						duplicates = True
+					nicknames.append(nickname)
+
+				if duplicates:
+					raise forms.ValidationError(
+						'Entries must have unique numbers and nicknames',
+						code = 'duplicate numbers',
+						)
+
+class BaseEmailFormset(BaseFormSet):
+	def clean(self):
+		if any(self.errors):
+			return
+
+		emails = []
+		nicknames = []
+		duplicates = False
+
+		for form in self.forms:
+			if form.cleaned_data:
+				email = form.cleaned_data['email']
+				nickname = form.cleaned_data['nickname']
+
+				if email in emails:
+					duplicates = True
+				emails.append(email)
+
+				if nickname in nicknames:
+					duplicates = True
+				nicknames.append(nickname)
+
+				if duplicates:
+					raise forms.ValidationError(
+						'Entries must have unique email addresses and nicknames',
+						code = 'duplicate emails',
+						)
+
+###Update Forms###
+class UpdatePhoneNumberForm(forms.Form):
+
+	def __init__(self,*args,**kwargs):
+		contact_id = kwargs.pop('phone_number_id',None)
+		super (UpdatePhoneNumberForm,self).__init__(*args,**kwargs)
+		self.fields['nickname'] = forms.CharField(max_length = 20, required=False)
+		self.fields['phone_number'] = forms.RegexField(regex=r'^\+?1?\d{9,15}$', error_message = ("Phone number must be entered in the format: +9999999999. Up to 15 digits allowed."))
+
+class UpdateEmailForm(forsm.Form):
+
+	def __init__(self,*args,**kwargs):
+		contact_id = kwargs.pop('email_id',None)
+		super(UpdateEmailForm,self).__init__(*args,**kwargs)
+		self.fields['nickname'] = forms.CharField(max_length = 20, required=False)
+		self.fields['email'] = forms.EmailField()
+
+class UpdateContactInfoForm(forms.Form):
+
+
+	def __init__(self,*args,**kwargs):
+		contact_id = kwargs.pop('contact_id',None)
+		super (UpdateContactInfoForm,self).__init__(*args,**kwargs)
+		if contact_id:
+			self.contact = Person.objects.get(pk=contact_id)
+		self.fields['title'] = forms.CharField(max_length = 10, required=False)
+		self.fields['first_name'] = forms.CharField(max_length = 20)
+		self.fields['last_name'] = forms.CharField(max_length = 20)
+		self.fields['spouse_name'] = forms.CharField(max_length = 20, required=False)
+		self.fields['street_address'] = forms.CharField(max_length = 40, required=False)
+		self.fields['city'] = forms.CharField(max_length = 30, required=False)
+		self.fields['state'] = forms.CharField(choices=STATE_CHOICES, required=False)
+		self.fields['zip'] = forms.CharField(required=False)
+
+
 	
  
 	

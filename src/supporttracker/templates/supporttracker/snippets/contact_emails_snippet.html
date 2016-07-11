@@ -1,0 +1,8 @@
+<p>Email addresses:<br/>
+	<ul>
+		{% for email in rel.contact.emailaddress_set.all %}
+			<li>{% if email.nickname %}{{email.nickname}}: {% endif %}{{email}}</li>
+		{% endfor %}
+	</ul>
+<p>
+<a href='/{{rel.contact.pk}}/update_emails/' div-to-update='#EmailDiv' modal='#UpdateEmailFormModal' ><span class='glyphicon glyphicon-pencil'></span></a>

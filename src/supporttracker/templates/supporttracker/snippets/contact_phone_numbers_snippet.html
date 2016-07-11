@@ -1,0 +1,8 @@
+<p>Phone numbers:<br/>
+	<ul>
+		{% for pn in phone_numbers %}
+			<li>{% if pn.nickname %}{{pn.nickname}}: {% endif %}{{pn.phone_number}}</li>
+		{% endfor %}
+	</ul>
+</p>
+<a href='/{{rel.contact.pk}}/update_phone_numbers/' div-to-update='#PhoneNumberDiv' modal='#UpdatePhoneNumberFormModal' ><span class='glyphicon glyphicon-pencil'></span></a>
