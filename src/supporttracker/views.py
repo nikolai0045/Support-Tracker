@@ -2799,7 +2799,7 @@ def update_info_view(request,*args,**kwargs):
 	rel = ContactRelationship.get(contact=contact,staff_person=request.user)
 	template = 'supporttracker/snippets/contact_info_snippet.html'
 	context = {
-		'rel'=rel,
+		'rel':rel,
 	}
 	return render(request,template,context)
 
