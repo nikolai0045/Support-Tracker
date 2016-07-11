@@ -2696,6 +2696,8 @@ class UpdatePhoneNumbersAjaxView(View):
 	def post_logic(self,request,*args,**kwargs):
 		PhoneNumberFormSet = formset_factory(UpdatePhoneNumberForm, formset=BasePhoneNumberFormset)
 		phone_number_formset = PhoneNumberFormSet(request.POST)
+		contact_id = kwargs.pop('contact_id')
+		contact = Person.objects.get(pk=contact_id)
 
 		if phone_number_formset.is_valid():
 			user_phone_numbers = PhoneNumber.objects.get(contact=contact)
@@ -2760,6 +2762,8 @@ class UpdateEmailsAjaxView(View):
 	def post_logic(self,request,*args,**kwargs):
 		EmailFormset = formset_factory(UpdateEmailForm, formset=BaseEmailFormset)
 		email_formset = EmailFormset(request.POST)
+		contact_id =kwargs.pop('contact_id')
+		contact = Person.objects.get(pk=contact_id)
 
 		if email_formset.is_valid():
 			user_emails = EmailAddress.objects.get(contact=contact)
