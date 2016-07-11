@@ -2743,7 +2743,11 @@ class UpdateEmailsAjaxView(View):
 		EmailFormset = formset_factory(UpdateEmailForm, formset=BaseEmailFormset)
 
 		user_emails = EmailAddress.objects.get(contact=contact)
-		email_data = [{'nickname':e.nickname, 'email'.e.email_address} for e in user_emails]
+		email_data = []
+		for e in user_emails:
+			nickname = e.nickname
+			email_address = e.email_address
+			email_data.append({'nickname':nickname,'email':email_address})
 
 		email_formset = EmailFormset(initial=email_data)
 
