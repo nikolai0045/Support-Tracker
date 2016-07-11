@@ -2808,7 +2808,7 @@ def update_phone_numbers_view(request,*args,**kwargs):
 	rel = ContactRelationship(contact=contact,staff_person=request.user)
 	template = 'supporttracker/snippets/contact_phone_numbers_snippet.html'
 	context = {
-		'rel'=rel,
+		'rel':rel,
 	}
 	return render(request,template,context)
 
@@ -2817,6 +2817,6 @@ def update_emails_view(request,*args,**kwargs):
 	rel = ContactRelationship(contact=contact,staff_person=request.user)
 	template = 'supporttracker/snippets/contact_emails_snippet.html'
 	context = {
-	'rel'=rel,
+	'rel':rel,
 	}
 	return render(request,template,context)
