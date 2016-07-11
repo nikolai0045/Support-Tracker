@@ -2732,7 +2732,7 @@ class UpdatePhoneNumbersAjaxView(View):
 			return render(request,self.template,context)
 
 class UpdateEmailsAjaxView(View):
-	template = 'supporttracker/ajax_forms/ajax_formset.html'
+	template = 'supporttracker/ajax_forms/update_emails.html'
 
 	def get(self,request,*args,**kwargs):
 		contact_id = kwargs.pop('contact_id')
