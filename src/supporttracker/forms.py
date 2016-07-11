@@ -1454,7 +1454,7 @@ class UpdateContactInfoForm(forms.Form):
 		self.fields['spouse_name'] = forms.CharField(max_length = 20, required=False)
 		self.fields['street_address'] = forms.CharField(max_length = 40, required=False)
 		self.fields['city'] = forms.CharField(max_length = 30, required=False)
-		self.fields['state'] = forms.CharField(choices=STATE_CHOICES, required=False)
+		self.fields['state'] = forms.ChoiceField(choices=STATE_CHOICES, required=False)
 		self.fields['zip'] = forms.CharField(required=False)
 
 
