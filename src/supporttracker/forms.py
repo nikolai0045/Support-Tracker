@@ -1446,8 +1446,6 @@ class UpdateContactInfoForm(forms.Form):
 	def __init__(self,*args,**kwargs):
 		contact_id = kwargs.pop('contact_id',None)
 		super (UpdateContactInfoForm,self).__init__(*args,**kwargs)
-		if contact_id:
-			self.contact = Person.objects.get(pk=contact_id)
 		self.fields['title'] = forms.CharField(max_length = 10, required=False)
 		self.fields['first_name'] = forms.CharField(max_length = 20)
 		self.fields['last_name'] = forms.CharField(max_length = 20)
@@ -1456,6 +1454,16 @@ class UpdateContactInfoForm(forms.Form):
 		self.fields['city'] = forms.CharField(max_length = 30, required=False)
 		self.fields['state'] = forms.ChoiceField(choices=STATE_CHOICES, required=False)
 		self.fields['zip'] = forms.CharField(required=False)
+		if contact_id:
+			self.contact = Person.objects.get(pk=contact_id)
+			self.fields['title'].initial = contact.title
+			self.fields['first_name'].initial = contact.first_name
+			self.fields['last_name'].initial = contact.last_name
+			self.fields['spouse_name'].initial = contact.spouse_name
+			self.fields['street_address'].initial = contact.street_address
+			self.fields['city'].initial = contact.city
+			self.fields['state'].initial = contact.state
+			self.fields['zip'].initial = contact.zip
 
 
 	

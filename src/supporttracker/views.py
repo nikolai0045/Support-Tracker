@@ -2682,7 +2682,7 @@ class UpdatePhoneNumbersAjaxView(View):
 
 		PhoneNumberFormSet = formset_factory(UpdatePhoneNumberForm, formset=BasePhoneNumberFormset)
 
-		user_phone_numbers = PhoneNumber.objects.get(contact=contact)
+		user_phone_numbers = PhoneNumber.objects.filter(contact=contact)
 		phone_number_data = [{'nickname':n.nickname,'phone_number':n.phone_number} for n in user_phone_numbers]
 
 		phone_number_formset = PhoneNumberFormSet(initial=phone_number_data)
@@ -2741,7 +2741,8 @@ class UpdateEmailsAjaxView(View):
 
 		EmailFormset = formset_factory(UpdateEmailForm, formset=BaseEmailFormset)
 
-		user_emails = EmailAddress.objects.get(contact=contact)
+		user_emails = EmailAddress.objects.filter(contact=contact)
+
 		email_data = []
 		for e in user_emails:
 			nickname = e.nickname
