@@ -46,7 +46,6 @@ INSTALLED_APPS = [
 	'bootstrap3_datetime',
 	'jquery',
 	'crispy_forms',
-    'jsonview',
 	'supporttracker',
 ]
 

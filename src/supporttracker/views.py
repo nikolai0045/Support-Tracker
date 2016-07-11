@@ -22,7 +22,6 @@ from django.views.generic import View
 from django.forms.formsets import formset_factory
 from django_datatables_view.base_datatable_view import BaseDatatableView
 import json
-from jsonview.decorators import json_view
 
 def processStageUpdate(rel,data,user):
 	rel.stage = data['new_stage']
