@@ -2773,7 +2773,7 @@ class UpdateEmailsAjaxView(View):
 				data = form.cleaned_data
 
 				new_email = EmailAddress(
-					email_address = data['email_address'],
+					email_address = data['email'],
 					nickname = data['nickname'],
 					contact = contact,
 					)
