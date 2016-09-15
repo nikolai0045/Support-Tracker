@@ -165,7 +165,7 @@ class UpdateStageForm(forms.Form):
 
 	def clean(self):
 		cleaned_data = super(UpdateStageForm,self).clean()
-				
+		print cleaned_data
 		if cleaned_data['stage'] == 'MESSAGE':
 			cleaned_data['date'] = cleaned_data['message_date']
 			cleaned_data['method'] = cleaned_data['message_method']
@@ -288,7 +288,7 @@ class UpdateStageForm(forms.Form):
 			widget=DateTimePicker(
 			attrs={'class':'form-control','id':'meeting_time'},
 			options={
-			'format':'HH:mm a',
+			'format':'hh:mm a',
 			'pickDate':False,
 			'pickSeconds':False,
 			},
@@ -1320,7 +1320,7 @@ class RegisterMeetingForm(forms.Form):
 	widget=DateTimePicker(
 	attrs={'class':'form-control'},
 	options={
-	'format':'HH:mm a',
+	'format':'hh:mm a',
 	'pickDate':False,
 	'pickSeconds':False,
 	},
@@ -1445,6 +1445,7 @@ class UpdateContactInfoForm(forms.Form):
 
 	def __init__(self,*args,**kwargs):
 		contact_id = kwargs.pop('contact_id',None)
+		contact = Person.objects.get(pk=contact_id)
 		super (UpdateContactInfoForm,self).__init__(*args,**kwargs)
 		self.fields['title'] = forms.CharField(max_length = 10, required=False)
 		self.fields['first_name'] = forms.CharField(max_length = 20)

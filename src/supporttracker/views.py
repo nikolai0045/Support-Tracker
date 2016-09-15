@@ -704,7 +704,7 @@ class recordCallModalView(View):
 	def get_logic(self,request,**kwargs):
 	
 		call_id = self.kwargs.pop('call_id',False)
-		modifer = self.kwargs.pop('modifier',False)
+		modifier = self.kwargs.pop('modifier',False)
 		
 		if call_id:
 			
@@ -735,7 +735,7 @@ class recordCallModalView(View):
 		
 	def post_logic(self,request,**kwargs):
 		
-		modifer = self.kwargs.pop('modifier',False)
+		modifier = self.kwargs.pop('modifier',False)
 		call_id = request.POST.get('call_id',False)
 		
 		if call_id:
@@ -792,12 +792,16 @@ class recordCallModalView(View):
 				stage_data = stageForm.cleaned_data
 				processStageUpdate(contact_rel,stage_data,request.user)
 				
+				
 				if not modifier:
 					classContext = get_table_class_context('calls')
+					print classContext
 					response = all_tables_update(request,classContext=classContext)
+					print response
 					return ['redirect',response]
+				
 				if modifier:
-					classContext = get_table_class_context('urgent')
+					classContext = get_table_class_context('calls')
 					response = all_tables_update(request,classContext=classContext)
 					return ['redirect',response]
 					
@@ -1997,8 +2001,6 @@ def new_contact(request):
 				first_name=first_name,
 				last_name=last_name,
 				spouse_name=spouse_name,
-				phone_number=phone_number,
-				email_address=email_address,
 				street_address=street_address,
 				city=city,
 				state=state,
@@ -2006,6 +2008,18 @@ def new_contact(request):
 				)
 							
 			new_person.save()
+			
+			new_pn = PhoneNumber(
+				contact = new_person,
+				phone_number = phone_number,
+			)
+			new_pn.save()
+
+			new_email = EmailAddress(
+				contact = new_person,
+				email_address = email_address,
+			)
+			new_email.save()
 		
 			staff_person = request.user.userprofile
 			contact = new_person

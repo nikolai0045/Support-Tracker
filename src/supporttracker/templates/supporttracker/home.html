@@ -40,6 +40,7 @@
                 url: url,
                 data: $(this).serialize(),
                 success:function(response, textStatus, jqXHR){
+		    console.log(response);
                     var form = $("#ajax_form_modal_result_div", response);
                     if (form.html()) {
                         $('#ajax_form_modal_result_div').html(form);
