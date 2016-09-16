@@ -1430,7 +1430,7 @@ class UpdatePhoneNumberForm(forms.Form):
 		contact_id = kwargs.pop('phone_number_id',None)
 		super (UpdatePhoneNumberForm,self).__init__(*args,**kwargs)
 		self.fields['nickname'] = forms.CharField(max_length = 20, required=False)
-		self.fields['phone_number'] = forms.RegexField(regex=r'^\+?1?\d{9,15}$', error_message = ("Phone number must be entered in the format: +9999999999. Up to 15 digits allowed."))
+		self.fields['phone_number'] = forms.RegexField(regex=r'^(\+\d{1,2}\s)?\(?\d{3}\)?[\s.-]\d{3}[\s.-]\d{4}$', error_message = ("Phone number must be entered in the format: 999-999-9999. Up to 15 digits allowed."))
 
 class UpdateEmailForm(forms.Form):
 
