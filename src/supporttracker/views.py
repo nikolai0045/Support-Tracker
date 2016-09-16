@@ -2718,18 +2718,19 @@ class UpdatePhoneNumbersAjaxView(View):
 			for pn in user_phone_numbers:
 				pn.delete()
 			for form in phone_number_formset:
-				data = form.cleaned_data
+				if form.is_valid():
+					data = form.cleaned_data
 
-				phone_number = data['phone_number']
-				nickname = data['nickname']
+					phone_number = data['phone_number']
+					nickname = data['nickname']
 
-				new_phone_number = PhoneNumber(
-					phone_number = phone_number,
-					nickname = nickname,
-					contact = contact,
-					)
+					new_phone_number = PhoneNumber(
+						phone_number = phone_number,
+						nickname = nickname,
+						contact = contact,
+						)
 
-				new_phone_number.save()
+					new_phone_number.save()
 
 			return ['redirect',update_phone_numbers_view(request,contact=contact)]
 
