@@ -2720,6 +2720,7 @@ class UpdatePhoneNumbersAjaxView(View):
 			for form in phone_number_formset:
 				if form.is_valid():
 					data = form.cleaned_data
+					print data
 
 					phone_number = data['phone_number']
 					nickname = data['nickname']
