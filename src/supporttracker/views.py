@@ -2832,7 +2832,7 @@ def update_info_view(request,*args,**kwargs):
 
 def update_phone_numbers_view(request,*args,**kwargs):
 	contact = kwargs.pop('contact')
-	rel = ContactRelationship(contact=contact,staff_person=request.user.userpfoile)
+	rel = ContactRelationship(contact=contact,staff_person=request.user.userprofile)
 	template = 'supporttracker/snippets/contact_phone_numbers_snippet.html'
 	context = {
 		'rel':rel,
