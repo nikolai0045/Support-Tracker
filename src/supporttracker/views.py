@@ -2720,17 +2720,19 @@ class UpdatePhoneNumbersAjaxView(View):
 			for form in phone_number_formset:
 				if form.is_valid():
 					data = form.cleaned_data
+					print data
 
-					phone_number = data['phone_number']
-					nickname = data['nickname']
+					phone_number = data.get('phone_number',False)
+					nickname = data.get('nickname',False)
 
-					new_phone_number = PhoneNumber(
-						phone_number = phone_number,
-						nickname = nickname,
-						contact = contact,
-						)
+					if phone_number:
+						new_phone_number = PhoneNumber(
+							phone_number = phone_number,
+							nickname = nickname,
+							contact = contact,
+							)
 
-					new_phone_number.save()
+						new_phone_number.save()
 
 			return ['redirect',update_phone_numbers_view(request,contact=contact)]
 
@@ -2785,15 +2787,21 @@ class UpdateEmailsAjaxView(View):
 			for e in user_emails:
 				e.delete()
 			for form in email_formset:
-				data = form.cleaned_data
+				if form.is_valid():
+					data = form.cleaned_data
 
-				new_email = EmailAddress(
-					email_address = data['email'],
-					nickname = data['nickname'],
-					contact = contact,
-					)
+					new_email_address = data.get('email',False)
+					new_nickname = data.get('nickname',False)
 
-				new_email.save()
+					if new_email_address:
+
+						new_email = EmailAddress(
+							email_address = new_email_address,
+							nickname = new_nickname,
+							contact = contact,
+							)
+
+						new_email.save()
 
 			return ['redirect',update_emails_view(request,contact=contact)]
 
