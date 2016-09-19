@@ -476,7 +476,7 @@ class UnderlingProfileView(View):
 		num_thank_yous = ThankYou.objects.filter(staff_person=underling,date__gte=week_start,date__lte=week_end).count()
 		num_voice_mails = VoiceMail.objects.filter(staff_person=underling,date_left__gte=week_start,date_left__lte=week_end).count()
 		num_referrals = Referral.objects.filter(staff_person=underling,date_referred__gte=week_start,date_referred__lte=week_end).count()
-		num_messages = Message.objects.filter(staff_person=underling,date__gte=week_start,date__lte=week_end).count()
+		num_messages = Message.objects.filter(staff_person=underling,date_entered__gte=week_start,date_entered__lte=week_end).count()
 		num_follow_ups = FollowUp.objects.filter(staff_person=underling,date__gte=week_start,date__lte=week_end).count()
 
 		support_nums = get_support_numbers(underling)
