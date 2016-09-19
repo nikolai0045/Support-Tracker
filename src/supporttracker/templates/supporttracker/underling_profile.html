@@ -1,0 +1,78 @@
+{% extends 'supporttracker/base.html' %}
+
+{% block content %}
+<div class='container'>
+	<h3>Support Report for {{underling}} for week of {{week_start}}</h3>
+	<div class='container'>
+		<h4>Summary Statistics</h4>
+		<table class='table table-condensed'>
+			<thead>
+				<th>Contacts</th>
+				<th>New Contacts</th>
+				<th>New Supporters</th>
+				<th>Calls</th>
+				<th>Meetings</th>
+				<th>Thank Yous</th>
+				<th>Voice Mails</th>
+				<th>Referrals</th>
+				<th>Messages</th>
+				<th>Follow Ups</th>
+				<th>Support %</th>
+			</thead>
+			<tbody>
+				<td>{{num_contacts}}</td>
+				<td>{{num_new_contacts}}</td>
+				<td>{{num_new_supporters}}</td>
+				<td>{{num_calls}}</td>
+				<td>{{num_meetings}}</td>
+				<td>{{num_thank_yous}}</td>
+				<td>{{num_voice_mails}}</td>
+				<td>{{num_referrals}}</td>
+				<td>{{num_messages}}</td>
+				<td>{{num_follow_ups}}</td>
+				<td>{{pct}}</td>
+			</tbody>
+		</table>
+	</div>
+	<div class='container'>
+		<div class='col-md-6'>
+			<h4>New Contacts</h4>
+			<table class='table table-condensed'>
+				<thead>
+					<th>Name</th>
+					<th>Stage</th>
+				</thead>
+				<tbody>
+					{% for c in new_contacts %}
+						<td>{{c.contact}}</td>
+						<td>{{c.stage}}</td>
+					{% empty %}
+						<td colspan="2">No new contacts this week</td>
+					{% endfor %}
+				</tbody>
+			</table>
+		</div>
+		<div class='col-md-6'>
+			<h4>New Supporters</h4>
+			<table class='table table-condensed'>
+				<thead>
+					<th>Name</th>
+					<th>Gift Amount</th>
+					<th>Frequency</th>
+					<th>Start Date</th>
+				</thead>
+				<tbody>
+					{% for s in new_supporters %}
+						<td>{{s.supporter}}</td>
+						<td>{{s.amount}}</td>
+						<td>{{s.frequency}}</td>
+						<td>{{s.start_date}}</td>
+					{% empty %}
+						<td colspan="4">No new supporters this week</td>
+					{% endfor %}
+				</tbody>
+			</table>
+		</div>
+	</div>
+</div>
+{% endblock content %}

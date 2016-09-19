@@ -53,6 +53,16 @@
 								<li><a href='/logout/'>log out</a></li>
 							</ul>
 						</li>
+						{% if user.userprofile.underlings %}
+						<li class='dropdown'>
+							<a href='#' class='dropdown-toggle'>Your team</a>
+							<ul class='dropdown-menu'>
+								{% for u in user.userprofile.underlings %}
+									<li><a href='/{{u.pk}}/support_report/'>{{u}}</a></li>
+								{% endfor %}
+							</ul>
+						</li>
+						{% endif %}
 					</ul>
 				</div>
 				<div class='pull-right' style='padding-top:10px'>

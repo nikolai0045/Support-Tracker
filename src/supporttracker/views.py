@@ -419,6 +419,7 @@ class ChangePasswordAJAX(View):
 			'fail':True,
 		}
 		return render(request,self.template,context)
+
 class UserProfileView(View):
 	template = 'supporttracker/user_profile.html'
 	@method_decorator(login_required)
@@ -454,6 +455,55 @@ class UserProfileView(View):
 		}
 		
 		return render(request,self.template,context)
+
+class UnderlingProfileView(request):
+	template = 'supporttracker/underling_profile.html'
+	def get(self,request,*args,**kwargs):
+		u_id = kwargs.pop('u_id',False)
+		seed_date = kwargs.pop('date',datetime.date.today())
+		week_start = seed_date - datetime.timedelta(days=seed_date.weekday())
+		week_end = week_start + datetime.timedelta(days=6)
+		underling = UserProfile.objects.get(pk=u_id)
+
+		num_contacts = ContactRelationship.objects.filter(staff_person=underling).count()
+		new_contacts = num_new_contacts = ContactRelationship.objects.filter(staff_person=underling,date_added__gte=week_start,date_added__lte=week_end)
+		num_new_contacts = new_contacts.count()
+		num_supporter = SupportRelationship.objects.filter(staff_person=underling).count()
+		new_supporters = SupportRelationship.objects.filter(staff_person=underling,date_entered__gte=week_start,date_entered__lte=week_end)
+		num_new_suporters = new_supporters.count()
+		num_calls = Call.objects.filter(staff_person=underling,date__gte=week_start,date__lte=week_end).count()
+		num_meetings = Meeting.objects.filter(staff_person=underling,date__gte=week_start,date__lte=week_end).count()
+		num_thank_yous = ThankYou.objects.filter(staff_person=underling,date__gte=week_start,date__lte=week_end).count()
+		num_voice_mails = VoiceMail.objects.filter(staff_person=underling,date_left__gte=week_start,date_left__lte=week_end).count()
+		num_referrals = Referral.objects.filter(staff_person=underling,date_referred__gte=week_start,date_referred__lte=week_end).count()
+		num_messages = Message.objects.filter(staff_person=underling,date__gte=week_start,date__lte=week_end).count()
+		num_follow_ups = FollowUp.objects.filter(staff_person=underling,date__gte=week_start,date__lte=week_end).count()
+
+		support_nums = get_support_numbers(underling)
+
+		pct = support_nums['pct']
+
+		context = {
+		'week_start':week_start,
+		'underling':underling,
+		'num_contacts':num_contacts,
+		'new_contacts':new_contacts,
+		'num_new_contacts':num_new_contacts,
+		'new_supporters':new_supporters,
+		'num_new_supporters':num_new_supporters,
+		'num_calls':num_calls,
+		'num_meetings':num_meetings,
+		'num_thank_yous':num_thank_yous,
+		'num_voice_mails':num_voice_mails,
+		'num_referrals':num_referrals,
+		'num_messages':num_messages,
+		'num_follow_ups':num_follow_ups,
+		'pct':pct,
+		}
+
+		return render(request,self.template,context)
+
+
 
 def contacts_list_view(request):
 
