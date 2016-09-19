@@ -53,12 +53,12 @@
 								<li><a href='/logout/'>log out</a></li>
 							</ul>
 						</li>
-						{% if user.userprofile.underlings %}
+						{% if user.userprofile.area_director %}
 						<li class='dropdown'>
 							<a href='#' class='dropdown-toggle'>Your team</a>
 							<ul class='dropdown-menu'>
-								{% for u in user.userprofile.underlings %}
-									<li><a href='/{{u.pk}}/support_report/'>{{u}}</a></li>
+								{% for r in user.userprofile.hierarchicalrelationship_set.all %}
+									<li><a href='/{{r.underling.pk}}/support_report/'>{{r.underling}}</a></li>
 								{% endfor %}
 							</ul>
 						</li>

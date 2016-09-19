@@ -88,14 +88,17 @@ class UserProfile(models.Model):
 	yearly_support_goal = models.IntegerField(default=54516)
 	area_director = models.BooleanField(default=False)
 	leadership_team = models.BooleanField(default=False)
-	bosses = models.ManyToManyField('self',related_name='underlings')
 	
 	def __str__(self):
 		if self.spouse_name != '':
 			return self.user.first_name + ' and ' + self.spouse_name + ' ' + self.user.last_name
 		else:
 			return self.user.first_name + ' ' + self.user.last_name
-	
+
+class HierarchicalRelationship(models.Model):
+	boss = models.ForeignKey(UserProfile,related_name='underling_relationship')
+	underling = models.ForeignKey(UserProfile,related_name='boss_relationship')
+
 class Person(models.Model):
 	title = models.CharField(max_length=20, blank=True)
 	first_name = models.CharField(max_length=120)
