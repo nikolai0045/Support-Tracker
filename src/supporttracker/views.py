@@ -470,7 +470,7 @@ class UnderlingProfileView(View):
 		num_new_contacts = new_contacts.count()
 		num_supporter = SupportRelationship.objects.filter(staff_person=underling).count()
 		new_supporters = SupportRelationship.objects.filter(staff_person=underling,date_entered__gte=week_start,date_entered__lte=week_end)
-		num_new_suporters = new_supporters.count()
+		num_new_supporters = new_supporters.count()
 		num_calls = Call.objects.filter(staff_person=underling,date__gte=week_start,date__lte=week_end).count()
 		num_meetings = Meeting.objects.filter(staff_person=underling,date__gte=week_start,date__lte=week_end).count()
 		num_thank_yous = ThankYou.objects.filter(staff_person=underling,date__gte=week_start,date__lte=week_end).count()
