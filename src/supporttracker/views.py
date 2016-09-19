@@ -456,7 +456,7 @@ class UserProfileView(View):
 		
 		return render(request,self.template,context)
 
-class UnderlingProfileView(request):
+class UnderlingProfileView(View):
 	template = 'supporttracker/underling_profile.html'
 	def get(self,request,*args,**kwargs):
 		u_id = kwargs.pop('u_id',False)
