@@ -76,7 +76,7 @@ urlpatterns = [
 	url(r'^supporter_list/$',views.SupporterListView.as_view()),
 	url(r'(?P<contact_id>[0-9]+)/contact_info/$',views.ContactInfoModalView.as_view()),
 	url(r'(?P<contact_rel_id>[0-9]+)/contact_profile/$',views.ContactProfileView.as_view()),
-	url(r'(?P<u_id>[0-9]+/support_report/$',views.UnderlingProfileView.as_view()),
+	url(r'(?P<u_id>[0-9]+)/support_report/$',views.UnderlingProfileView.as_view()),
 	##AJAX form views
 	url(r'(?P<contact_id>[0-9]+)/update_profile/$',views.UpdateInfoAjaxView.as_view()),
 	url(r'(?P<contact_id>[0-9]+)/update_phone_numbers/$',views.UpdatePhoneNumbersAjaxView.as_view()),
