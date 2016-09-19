@@ -88,7 +88,7 @@ class UserProfile(models.Model):
 	yearly_support_goal = models.IntegerField(default=54516)
 	area_director = models.BooleanField(default=False)
 	leadership_team = models.BooleanField(default=False)
-	bosses = models.ManyToManyField(UserProfile,related_name='underlings')
+	bosses = models.ManyToManyField('self',related_name='underlings')
 	
 	def __str__(self):
 		if self.spouse_name != '':
