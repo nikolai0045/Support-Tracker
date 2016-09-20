@@ -1424,6 +1424,24 @@ class BaseEmailFormset(BaseFormSet):
 						)
 
 ###Update Forms###
+class updateStageSimple(forms.Form):
+
+	def __init__(self,*args,**kwargs):
+		rel_id = kwargs.pop('rel_id')
+		rel = ContactRelationship.objects.get(pk=rel_id)
+		super (updateStageSimple,self).__init__(*args,**kwargs)
+		self.fields['stage'] = forms.ChoiceField(options=STAGE_OPTIONS)
+		self.fields['stage'].initial = rel.stage
+
+		self.helper = FormHelper(self)
+		self.helper.form_id = 'update_stage_form'
+		self.helper.layout = Layout(
+			Div(
+				'stage',
+			)
+		)
+
+
 class UpdatePhoneNumberForm(forms.Form):
 
 	def __init__(self,*args,**kwargs):

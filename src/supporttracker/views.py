@@ -9,7 +9,7 @@ from django.contrib.auth import authenticate, login, update_session_auth_hash
 from django.contrib.auth.decorators import login_required
 from django.utils.decorators import method_decorator
 from .models import UserProfile, Person, SupportRelationship, ContactRelationship, ThankYou, Letter, Call, Meeting, VoiceMail, Reminder, Note, Message, FollowUp, Referral, EmailAddress, PhoneNumber, AdditionalInformation
-from .forms import AddContactForm, AddThankYouForm, AddLetterForm, RegisterGiftForm, RegisterCallForm, RegisterMeetingForm, RegisterVoiceMailForm, RecordMeetingModalForm, AddReminder, RecordCallModalForm, RecordFollowUpModalForm, UpdateReminderModalForm, RecordMessageModalForm, ScheduleMessageModalForm, ScheduleCallModalForm, ScheduleThankYouModalForm, RecordThankYouModalForm, ScheduleFollowUpModalForm, UpdateStageForm, LoginForm, AddReferralForm, ChangePasswordForm, CreateUserProfileForm, DeleteContactForm, UpdatePhoneNumberForm, BasePhoneNumberFormset, UpdateContactInfoForm, BaseEmailFormset, UpdateEmailForm
+from .forms import AddContactForm, AddThankYouForm, AddLetterForm, RegisterGiftForm, RegisterCallForm, RegisterMeetingForm, RegisterVoiceMailForm, RecordMeetingModalForm, AddReminder, RecordCallModalForm, RecordFollowUpModalForm, UpdateReminderModalForm, RecordMessageModalForm, ScheduleMessageModalForm, ScheduleCallModalForm, ScheduleThankYouModalForm, RecordThankYouModalForm, ScheduleFollowUpModalForm, UpdateStageForm, LoginForm, AddReferralForm, ChangePasswordForm, CreateUserProfileForm, DeleteContactForm, UpdatePhoneNumberForm, BasePhoneNumberFormset, UpdateContactInfoForm, BaseEmailFormset, UpdateEmailForm, updateStageSimple
 from .decorators import profile_required
 import datetime
 import csv
@@ -365,6 +365,7 @@ class ContactProfileView(View):
 		
 		gifts = SupportRelationship.objects.filter(staff_person=request.user.userprofile,supporter=rel.contact)
 
+		update_stage_form = updateStageSimple(rel_id=rel_id)
 		delete_contact_form = DeleteContactForm(rel_id=rel_id)
 		
 		context = {
@@ -377,10 +378,22 @@ class ContactProfileView(View):
 			'reminders':reminders,
 			'gifts':gifts,
 			'delete_contact_form':delete_contact_form,
+			'update_stage_form':update_stage_form,
 			'phone_numbers':phone_numbers,
 		}
 		
 		return render(request,self.template,context)
+
+	def post(self,request,*args,**kwargs):
+		rel_id = self.kwargs.pop('contact_rel_id',None)
+		rel = ContactRelationship.objects.get(pk=rel_id)
+
+		form = updateStageSimple(request.POST,rel_id=rel_id)
+		if form.is_valid():
+			rel.stage = form.cleaned_data['stage']
+			rel.save()
+
+		return redirect('/'+str(rel_id)+'/contact_profile/')
 		
 class UserSettingsView(View):
 	template = 'supporttracker/user_settings.html'
