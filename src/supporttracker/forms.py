@@ -1438,6 +1438,9 @@ class updateStageSimple(forms.Form):
 		self.helper.layout = Layout(
 			Div(
 				'stage',
+			),
+			FormActions(
+				Submit('submit', 'Update', css_class='btn')
 			)
 		)
 
