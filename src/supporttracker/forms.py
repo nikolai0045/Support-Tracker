@@ -1430,7 +1430,7 @@ class updateStageSimple(forms.Form):
 		rel_id = kwargs.pop('rel_id')
 		rel = ContactRelationship.objects.get(pk=rel_id)
 		super (updateStageSimple,self).__init__(*args,**kwargs)
-		self.fields['stage'] = forms.ChoiceField(options=STAGE_OPTIONS)
+		self.fields['stage'] = forms.ChoiceField(choices=STAGE_OPTIONS)
 		self.fields['stage'].initial = rel.stage
 
 		self.helper = FormHelper(self)
