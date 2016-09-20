@@ -2873,7 +2873,7 @@ class UpdateEmailsAjaxView(View):
 #snippet handlers
 def update_info_view(request,*args,**kwargs):
 	contact = kwargs.pop('contact')
-	rel = ContactRelationship.objects.get(contact=contact,staff_person=request.user)
+	rel = ContactRelationship.objects.get(contact=contact,staff_person=request.user.userprofile)
 	template = 'supporttracker/snippets/contact_info_snippet.html'
 	context = {
 		'rel':rel,
